@@ -145,6 +145,7 @@
             tile.style.setProperty("--tile-accent", activities[index].accent);
             tile.classList.toggle("is-active", isActive);
             tile.setAttribute("aria-current", String(isActive));
+            tile.setAttribute("aria-label", activities[index].title + (isActive ? " — erneut aktivieren zum Starten" : " auswählen"));
             tile.tabIndex = isActive ? 0 : -1;
         });
 
@@ -206,11 +207,17 @@
         selectActivity(activeIndex + direction, { focus: shouldFocus });
     };
 
-    tiles.forEach((tile, index) => {
-        tile.addEventListener("click", () => {
-            selectActivity(index, { focus: true });
+        tiles.forEach((tile, index) => {
+            tile.addEventListener("click", () => {
+                // Selected tile → launch the app; others → bring to center
+                if (index === activeIndex) {
+                    const activity = activities[index];
+                    if (activity.href) window.open(activity.href, "_self");
+                    return;
+                }
+                selectActivity(index, { focus: true });
+            });
         });
-    });
 
     document.querySelectorAll("[data-direction]").forEach((control) => {
         control.addEventListener("click", () => {
