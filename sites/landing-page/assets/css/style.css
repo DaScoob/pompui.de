@@ -374,15 +374,15 @@ svg {
     background: transparent;
     color: var(--text);
     cursor: pointer;
-    opacity: calc(1 - (min(abs(var(--offset)), 3) * 0.2));
+    opacity: var(--tile-opacity, 1);
     transform:
-        translate3d(calc(-50% + (var(--offset) * clamp(7rem, 17dvh, 12rem))), -50%, 0)
-        scale(calc(1 - (min(abs(var(--offset)), 3) * 0.12)));
+        translate3d(calc(-50% + var(--tile-shift, 0px)), -50%, 0)
+        scale(var(--tile-scale, 1));
     transition:
         transform 660ms var(--ease-spring),
         opacity 420ms ease,
         filter 420ms ease;
-    filter: blur(calc(max(abs(var(--offset)) - 1, 0) * 1px));
+    filter: blur(var(--tile-blur, 0px));
     will-change: transform, opacity;
 }
 
@@ -422,11 +422,11 @@ svg {
     opacity: 0.24;
 }
 
-.activity-tile:nth-child(1) { --tile-accent: #9bea75; }
-.activity-tile:nth-child(2) { --tile-accent: #ff9365; }
-.activity-tile:nth-child(3) { --tile-accent: #56d9e8; }
-.activity-tile:nth-child(4) { --tile-accent: #f6c85f; }
-.activity-tile:nth-child(5) { --tile-accent: #bd8cff; }
+.activity-tile:nth-child(1) { --tile-accent: #9bea75; --tile-shift: 0rem; }
+.activity-tile:nth-child(2) { --tile-accent: #ff9365; --tile-shift: 10rem; }
+.activity-tile:nth-child(3) { --tile-accent: #56d9e8; --tile-shift: 20rem; }
+.activity-tile:nth-child(4) { --tile-accent: #f6c85f; --tile-shift: -20rem; }
+.activity-tile:nth-child(5) { --tile-accent: #bd8cff; --tile-shift: -10rem; }
 
 .activity-tile__icon {
     position: relative;
@@ -822,12 +822,6 @@ svg {
         width: min(100%, 34rem);
     }
 
-    .activity-tile {
-        transform:
-            translate3d(calc(-50% + (var(--offset) * clamp(6rem, 16dvh, 8rem))), -50%, 0)
-            scale(calc(1 - (min(abs(var(--offset)), 3) * 0.13)));
-    }
-
     .carousel-control {
         display: none;
     }
@@ -886,9 +880,6 @@ svg {
 
     .activity-tile {
         width: clamp(4.6rem, 17dvh, 6rem);
-        transform:
-            translate3d(calc(-50% + (var(--offset) * clamp(5.5rem, 21dvh, 7rem))), -50%, 0)
-            scale(calc(1 - (min(abs(var(--offset)), 3) * 0.13)));
     }
 }
 
