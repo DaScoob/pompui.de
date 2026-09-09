@@ -291,7 +291,9 @@
     }
 
     function alarmSave() {
-        localStorage.setItem("punctum-alarms", JSON.stringify(alarm.alarms));
+        try {
+            localStorage.setItem("punctum-alarms", JSON.stringify(alarm.alarms));
+        } catch { /* storage blocked — alarms stay for the session */ }
     }
 
     function nextFireFor(hh, mm) {
@@ -518,7 +520,9 @@
     } catch { /* defaults */ }
 
     window.addEventListener("beforeunload", () => {
-        localStorage.setItem("punctum-pomodoro-config", JSON.stringify(pomo.config));
+        try {
+            localStorage.setItem("punctum-pomodoro-config", JSON.stringify(pomo.config));
+        } catch { /* storage blocked — config stays for the session */ }
     });
 
     pomoUpdateButtons();
