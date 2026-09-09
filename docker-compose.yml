@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  pompui-landing:
+    build: ./sites/landing-page
+    container_name: pompui-landing
+    networks:
+      - pompui-network
+      - web-network
+    restart: always
+
+networks:
+  pompui-network:
+    driver: bridge
+  web-network:
+    # Shared external network created by the DHde project's global-proxy.
+    # Run once on the host:  docker network create web-network
+    external: true
