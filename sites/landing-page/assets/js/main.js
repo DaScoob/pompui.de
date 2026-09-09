@@ -14,6 +14,17 @@
             action: "Aktivität starten"
         },
         {
+            id: "snapotter",
+            title: "SnapOtter",
+            status: "Bereit",
+            description: "200+ Werkzeuge für Bilder, Video, Audio, PDFs und Dokumente — auf deinem eigenen Server.",
+            meta: "Konvertieren · Komprimieren · KI · AGPL-3.0",
+            accent: "#62b6f7",
+            accentRgb: "86, 181, 247",
+            href: "https://snapotter.pompui.de/",
+            action: "Aktivität starten"
+        },
+        {
             id: "obacht",
             title: "Obacht",
             status: "In Entwicklung",
