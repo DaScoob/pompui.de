@@ -687,8 +687,6 @@ svg {
 }
 
 .legal-intro {
-    position: sticky;
-    top: 8rem;
     align-self: start;
 }
 
@@ -704,9 +702,10 @@ svg {
 .legal-intro h1 {
     margin: 0;
     font-family: var(--display);
-    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    font-size: clamp(2.2rem, 3.4vw, 3.4rem);
     letter-spacing: -0.055em;
-    line-height: 0.95;
+    line-height: 1;
+    overflow-wrap: break-word;
 }
 
 .legal-intro p {
@@ -715,6 +714,8 @@ svg {
 }
 
 .legal-card {
+    position: relative;
+    z-index: 1;
     overflow: hidden;
     border: 1px solid var(--line);
     border-radius: clamp(1.25rem, 3vw, 2rem);
