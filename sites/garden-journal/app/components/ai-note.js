@@ -2,9 +2,9 @@ export function AiNote() {
   return (
     <a
       className="ai-note pompui-chrome__ai-note"
-      href="https://pompui.de/impressum"
+      href="https://pompui.de/datenschutz"
       title="Diese Seite wurde mit Unterstützung von KI erstellt"
-      aria-label="Hinweis: Diese Seite wurde mit Unterstützung von KI erstellt. Zum Impressum."
+      aria-label="Hinweis: Diese Seite wurde mit Unterstützung von KI erstellt. Zur Datenschutzerklärung."
     >
       ✳ Mit KI erstellt
     </a>

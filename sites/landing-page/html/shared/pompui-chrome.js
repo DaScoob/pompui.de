@@ -7,7 +7,7 @@
 (function () {
     "use strict";
 
-    var IMPRESSUM_URL = "https://pompui.de/impressum";
+    var IMPRESSUM_URL = "https://pompui.de/datenschutz";
     var HOME_URL = "https://pompui.de/";
 
     function el(tag, cls, text) {
@@ -19,9 +19,9 @@
 
     function buildAiNote() {
         var a = el("a", "pompui-chrome__ai-note");
-        a.href = IMPRESSUM_URL;
+        a.href = DATENSCHUTZ_URL;
         a.title = "Diese Seite wurde mit Unterstützung von KI erstellt";
-        a.setAttribute("aria-label", "Hinweis: Diese Seite wurde mit Unterstützung von KI erstellt. Zum Impressum.");
+        a.setAttribute("aria-label", "Hinweis: Diese Seite wurde mit Unterstützung von KI erstellt. Zur Datenschutzerklärung.");
         a.textContent = "✳ Mit KI erstellt";
         return a;
     }
