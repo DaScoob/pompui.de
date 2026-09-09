@@ -1,0 +1,454 @@
+:root {
+    color-scheme: dark;
+    --bg: #06100d;
+    --bg-elevated: #0b1a15;
+    --surface: rgba(16, 35, 29, 0.72);
+    --text: #f3f7f4;
+    --muted: #9aada5;
+    --line: rgba(224, 241, 232, 0.14);
+    --accent: #9bea75;
+    --accent-soft: #52c887;
+    --danger: #ff8a7a;
+    --warn: #f6c85f;
+    --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Roboto Mono, Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--bg); scroll-behavior: smooth; }
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    background:
+        radial-gradient(circle at 18% 8%, rgba(75, 191, 122, 0.1), transparent 34rem),
+        linear-gradient(145deg, #07130f 0%, #06100d 46%, #040907 100%);
+    color: var(--text);
+    font-family: var(--font);
+    display: flex;
+    flex-direction: column;
+}
+
+.scene {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.scene__orb {
+    position: absolute;
+    top: -18rem;
+    left: 50%;
+    width: 46rem;
+    height: 46rem;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(75, 191, 122, 0.16), transparent 62%);
+}
+
+.scene__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(224, 241, 232, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(224, 241, 232, 0.045) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 78%);
+}
+
+/* ---------- topbar ---------- */
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 1.4rem clamp(1.25rem, 4vw, 3rem);
+    border-bottom: 1px solid var(--line);
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    text-decoration: none;
+    color: var(--text);
+}
+
+.brand__mark {
+    display: grid;
+    width: 2.6rem;
+    height: 2.6rem;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.045);
+}
+
+.brand__mark svg {
+    width: 1.6rem;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+.brand__wordmark {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+}
+
+.mode-tabs { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+
+.mode-tab {
+    padding: 0.45rem 0.95rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.mode-tab:hover { color: var(--text); }
+
+.mode-tab.is-active {
+    color: var(--text);
+    border-color: var(--accent);
+    background: rgba(155, 234, 117, 0.12);
+}
+
+/* ---------- panels ---------- */
+
+main {
+    flex: 1;
+    width: min(46rem, 100%);
+    margin: 0 auto;
+    padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 4vw, 3rem);
+}
+
+.panel[hidden] { display: none; }
+
+.panel { text-align: center; }
+
+.display {
+    font-family: var(--mono);
+    font-weight: 300;
+    font-size: clamp(3.4rem, 13vw, 7rem);
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+    margin: 1.5rem 0 0.75rem;
+}
+
+.display__milli {
+    font-size: 0.35em;
+    color: var(--muted);
+    margin-left: 0.3rem;
+}
+
+.display--pomodoro.is-focus { color: var(--accent); }
+.display--pomodoro.is-break { color: var(--warn); }
+.display.is-done { animation: display-pulse 0.6s ease 3; }
+
+@keyframes display-pulse {
+    50% { color: var(--accent); transform: scale(1.03); }
+}
+
+.display-sub { color: var(--muted); font-family: var(--mono); min-height: 1.2em; }
+.display-sub[hidden] { display: none; }
+
+/* ---------- controls ---------- */
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+}
+
+.controls--stacked { flex-direction: column; align-items: center; }
+
+.btn {
+    min-width: 7.5rem;
+    padding: 0.7rem 1.3rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.btn:hover:not(:disabled) { transform: translateY(-1px); border-color: var(--accent); }
+.btn:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: 2px; }
+.btn:disabled { opacity: 0.35; cursor: default; }
+
+.btn--primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #08130c;
+    font-weight: 600;
+}
+
+.btn--primary.is-running { background: var(--warn); border-color: var(--warn); }
+
+.btn--danger { color: var(--danger); border-color: rgba(255, 138, 122, 0.4); }
+.btn--danger:hover:not(:disabled) { border-color: var(--danger); }
+
+/* ---------- stopwatch laps ---------- */
+
+.lap-list {
+    max-width: 24rem;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+    font-family: var(--mono);
+    font-size: 0.88rem;
+}
+
+.lap-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.45rem 0.9rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+}
+
+.lap-list li b { color: var(--text); font-weight: 400; }
+
+/* ---------- timer inputs / presets ---------- */
+
+.time-inputs { display: flex; gap: 0.9rem; justify-content: center; flex-wrap: wrap; }
+
+.time-inputs label {
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.time-inputs input,
+.pomodoro-config input,
+.alarm-form input {
+    width: 6rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 0.6rem;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-family: var(--mono);
+    text-align: center;
+}
+
+input:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: 1px; }
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { opacity: 0.35; }
+
+.presets { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; }
+
+.presets button {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.presets button:hover { color: var(--text); border-color: var(--accent); }
+
+/* ---------- alarm ---------- */
+
+.alarm-grid {
+    display: flex;
+    gap: clamp(1.5rem, 5vw, 4rem);
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.display--small { font-size: clamp(2.4rem, 8vw, 4rem); margin: 0; }
+.alarm-clock-label { margin: 0.4rem 0 0; color: var(--muted); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.alarm-form { display: grid; gap: 0.9rem; justify-items: start; font-size: 0.78rem; color: var(--muted); }
+
+.alarm-list {
+    max-width: 24rem;
+    margin: 0 auto 1rem;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9rem;
+}
+
+.alarm-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 0.6rem;
+    margin-bottom: 0.5rem;
+    font-family: var(--mono);
+}
+
+.alarm-list button {
+    border: none;
+    background: none;
+    color: var(--danger);
+    font: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.hint { color: var(--muted); font-size: 0.85rem; }
+
+/* ---------- pomodoro ---------- */
+
+.pomodoro-phase {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+}
+
+.pomodoro-phase__dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.pomodoro-phase__dot.is-break { background: var(--warn); }
+
+.pomodoro-progress {
+    height: 3px;
+    max-width: 22rem;
+    margin: 0 auto 0.5rem;
+    background: var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.pomodoro-progress span {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    transition: width 0.4s linear;
+}
+
+.pomodoro-config {
+    display: flex;
+    gap: 0.9rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.pomodoro-config label {
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.pomodoro-config input { width: 4.5rem; }
+
+/* ---------- flash & toast ---------- */
+
+.flash {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background: var(--accent);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.flash.is-active { animation: flash 1.2s ease; }
+
+@keyframes flash {
+    0% { opacity: 0; }
+    18% { opacity: 0.55; }
+    100% { opacity: 0; }
+}
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 1.5rem;
+    transform: translateX(-50%);
+    z-index: 200;
+    padding: 0.7rem 1.3rem;
+    border: 1px solid var(--accent);
+    border-radius: 0.8rem;
+    background: var(--bg-elevated);
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+/* ---------- footer ---------- */
+
+.foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem clamp(1.25rem, 4vw, 3rem);
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.82rem;
+}
+
+.foot a { color: var(--muted); text-decoration: none; }
+.foot a:hover { color: var(--text); }
+.foot p { margin: 0; }
+
+/* ---------- ai note (shared pattern) ---------- */
+
+.ai-note {
+    position: fixed;
+    z-index: 200;
+    top: 0.6rem;
+    left: 0.6rem;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+    opacity: 0.45;
+    background: rgba(0, 0, 0, 0.15);
+    color: var(--muted);
+    text-decoration: none;
+}
+
+.ai-note:hover { opacity: 0.85; }
+
+@media (max-width: 640px) {
+    .topbar { justify-content: center; }
+    .time-inputs input { width: 5rem; }
+}

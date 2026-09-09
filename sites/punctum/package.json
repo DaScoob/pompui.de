@@ -1,0 +1,9 @@
+{
+    "name": "punctum",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Punctum — Stoppuhr, Timer, Wecker und Pomodoro. Statisches Frontend, gehostet auf pompui.de.",
+    "scripts": {
+        "test": "node --test test/*.test.js"
+    }
+}
