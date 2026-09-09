@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Punctum — Stoppuhr, Timer, Wecker und Pomodoro. Präzise Zeit-Instrumente, selbst gehostet.">
+    <meta name="theme-color" content="#07110f">
+    <title>Punctum — Zeit-Instrumente</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <script src="/assets/js/main.js" defer></script>
+</head>
+<body>
+    <a class="ai-note" href="https://pompui.de/impressum" title="Diese Seite wurde mit Unterstützung von KI erstellt" aria-label="Hinweis: Diese Seite wurde mit Unterstützung von KI erstellt. Zum Impressum.">✳ Mit KI erstellt</a>
+
+    <div class="scene" aria-hidden="true">
+        <span class="scene__orb scene__orb--primary"></span>
+        <span class="scene__grid"></span>
+    </div>
+
+    <header class="topbar">
+        <a class="brand" href="/" aria-label="POMPUI Startseite">
+            <span class="brand__mark" aria-hidden="true">
+                <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" /><path d="M24 15v9l6 6" /><path d="M42 24h-3M9 24H6" /></svg>
+            </span>
+            <span class="brand__wordmark">PUNCTUM</span>
+        </a>
+        <nav class="mode-tabs" aria-label="Modus wählen">
+            <button class="mode-tab is-active" type="button" data-mode="stopwatch" aria-pressed="true">Stoppuhr</button>
+            <button class="mode-tab" type="button" data-mode="timer" aria-pressed="false">Timer</button>
+            <button class="mode-tab" type="button" data-mode="alarm" aria-pressed="false">Wecker</button>
+            <button class="mode-tab" type="button" data-mode="pomodoro" aria-pressed="false">Pomodoro</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- ============ STOPWATCH ============ -->
+        <section class="panel is-active" data-panel="stopwatch" aria-label="Stoppuhr">
+            <div class="display" data-stopwatch-display role="timer" aria-live="off">00:00:00<span class="display__milli">.00</span></div>
+            <div class="display-sub" data-stopwatch-milli-wrap hidden><span data-stopwatch-milli>00</span></div>
+            <div class="controls">
+                <button class="btn btn--primary" type="button" data-stopwatch-toggle>Start</button>
+                <button class="btn" type="button" data-stopwatch-lap disabled>Runde</button>
+                <button class="btn btn--danger" type="button" data-stopwatch-reset disabled>Reset</button>
+            </div>
+            <ol class="lap-list" data-stopwatch-laps aria-label="Zwischenzeiten"></ol>
+        </section>
+
+        <!-- ============ TIMER ============ -->
+        <section class="panel" data-panel="timer" aria-label="Timer" hidden>
+            <div class="display" data-timer-display role="timer">05:00</div>
+            <div class="controls controls--stacked">
+                <div class="time-inputs" data-timer-inputs>
+                    <label>Stunden <input type="number" min="0" max="23" value="0" data-timer-h></label>
+                    <label>Minuten <input type="number" min="0" max="59" value="5" data-timer-m></label>
+                    <label>Sekunden <input type="number" min="0" max="59" value="0" data-timer-s></label>
+                </div>
+                <div class="controls">
+                    <button class="btn btn--primary" type="button" data-timer-toggle>Start</button>
+                    <button class="btn btn--danger" type="button" data-timer-reset disabled>Reset</button>
+                </div>
+            </div>
+            <div class="presets" data-timer-presets aria-label="Vorlagen">
+                <button type="button" data-preset="60">1 min</button>
+                <button type="button" data-preset="180">3 min</button>
+                <button type="button" data-preset="300">5 min</button>
+                <button type="button" data-preset="600">10 min</button>
+                <button type="button" data-preset="1500">25 min</button>
+            </div>
+        </section>
+
+        <!-- ============ ALARM ============ -->
+        <section class="panel" data-panel="alarm" aria-label="Wecker" hidden>
+            <div class="alarm-grid">
+                <div class="alarm-time">
+                    <div class="display display--small" data-alarm-clock role="clock">--:--</div>
+                    <p class="alarm-clock-label">Aktuelle Zeit</p>
+                </div>
+                <div class="alarm-form">
+                    <label>Weckerzeit <input type="time" data-alarm-time value="07:00"></label>
+                    <button class="btn btn--primary" type="button" data-alarm-set>Alarm setzen</button>
+                </div>
+            </div>
+            <ul class="alarm-list" data-alarm-list aria-label="Aktive Alarme"></ul>
+            <p class="hint" data-alarm-empty>Noch kein Alarm gesetzt.</p>
+        </section>
+
+        <!-- ============ POMODORO ============ -->
+        <section class="panel" data-panel="pomodoro" aria-label="Pomodoro" hidden>
+            <div class="pomodoro-phase">
+                <span class="pomodoro-phase__dot" data-pomodoro-dot aria-hidden="true"></span>
+                <span data-pomodoro-phase>Fokus</span>
+                <span class="pomodoro-phase__round" data-pomodoro-round>Runde 1</span>
+            </div>
+            <div class="display display--pomodoro" data-pomodoro-display role="timer">25:00</div>
+            <div class="pomodoro-progress" aria-hidden="true"><span data-pomodoro-progress></span></div>
+            <div class="controls">
+                <button class="btn btn--primary" type="button" data-pomodoro-toggle>Start</button>
+                <button class="btn" type="button" data-pomodoro-skip>Überspringen</button>
+                <button class="btn btn--danger" type="button" data-pomodoro-reset>Reset</button>
+            </div>
+            <div class="pomodoro-config">
+                <label>Fokus (min) <input type="number" min="1" max="90" value="25" data-pomodoro-focus></label>
+                <label>Kurz (min) <input type="number" min="1" max="30" value="5" data-pomodoro-short></label>
+                <label>Lang (min) <input type="number" min="1" max="60" value="15" data-pomodoro-long></label>
+                <label>Runden <input type="number" min="1" max="10" value="4" data-pomodoro-rounds></label>
+            </div>
+        </section>
+    </main>
+
+    <footer class="foot">
+        <a href="https://pompui.de/" aria-label="Zurück zu POMPUI">&larr; POMPUI</a>
+        <p>Daten bleiben lokal im Browser.</p>
+        <a href="https://pompui.de/impressum">Impressum</a>
+    </footer>
+
+    <div class="flash" data-flash aria-hidden="true"></div>
+    <div class="toast" data-toast role="status" hidden></div>
+</body>
+</html>
