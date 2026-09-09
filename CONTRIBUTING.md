@@ -8,7 +8,7 @@ Welcome! This repo hosts the sources for **pompui.de** (landing page + garden jo
 
 Since several people contribute, please follow this flow:
 
-1. **Fork** the repo on GitHub (or work in a feature branch if you have write access and prefer that).
+1. **Fork** the repo on GitHub — this applies to **everyone**, including maintainers with write access. No direct commits to `main`, ever.
 2. Create a **feature branch** in your fork, named after what it does:
    - `feature/<topic>` — new functionality (e.g. `feature/activity-menu`)
    - `fix/<topic>` — bug fixes (e.g. `fix/ssl-fallback`)
@@ -19,14 +19,17 @@ Since several people contribute, please follow this flow:
 5. Open a **Pull Request** against `main` of `GitMinIT/pompui.de`.
 6. Wait for a review/approval from a maintainer before merging. Do not force-push to shared branches.
 
+> **Why forks even for maintainers?** A fork keeps `main` protected as the single source of truth: every change gets reviewed, CI/tested and is traceable to a PR — no exceptions. Reviewing your own work before it lands beats reverting a broken deploy afterwards.
+
 ### Branch & commit etiquette
 - `main` is the deployable truth: it should always build and reflect what runs on the server.
-- Never commit directly to `main` (except trivial doc typo fixes) — use PRs.
+- **Nobody pushes to `main` directly** — all changes (including maintainers' and agent changes) go through a PR from a fork/branch.
 - Write **small, focused commits** with clear messages:
   - Good: `Fix 404 fallback in landing page nginx config`
   - Bad: `changes`, `update`, `wip final FINAL`
 - Rebase onto `main` before merging to keep history linear and readable.
 - If a PR touches infrastructure (nginx, compose, certs), say so explicitly in the PR description.
+- **Exception:** emergency hotfixes may land on `main` directly, but must be followed by a short retro-PR documenting what was changed and why.
 
 ## Testing locally
 
@@ -95,3 +98,5 @@ A PR that adds a page without the badge will be asked to fix it before merge.
 ## Code of conduct
 
 Be decent to each other, review constructively, and remember: someone else may maintain your code after you.
+
+> **Applies to agents too:** automated agents (including AI coding agents working on this server) follow the same fork & PR flow as humans. The agent's fork/branch should indicate the task, e.g. `agent/<topic>` or `feature/<topic>`.
