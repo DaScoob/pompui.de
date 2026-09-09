@@ -19,7 +19,7 @@
 
     function buildAiNote() {
         var a = el("a", "pompui-chrome__ai-note");
-        a.href = DATENSCHUTZ_URL;
+        a.href = IMPRESSUM_URL;
         a.title = "Diese Seite wurde mit Unterstützung von KI erstellt";
         a.setAttribute("aria-label", "Hinweis: Diese Seite wurde mit Unterstützung von KI erstellt. Zur Datenschutzerklärung.");
         a.textContent = "✳ Mit KI erstellt";
