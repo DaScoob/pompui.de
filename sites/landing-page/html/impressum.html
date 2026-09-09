@@ -5,27 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, follow">
     <title>Impressum – pompui.de</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.6;
-            color: #1a1a1a;
-            background: #fff;
-            padding: 2rem 1rem;
+        .impressum {
+            max-width: 720px;
+            margin: 3rem auto;
+            line-height: 1.7;
         }
-        main { max-width: 720px; margin: 0 auto; }
-        h1 { font-size: 1.8rem; margin-bottom: 1.5rem; }
-        h2 { font-size: 1.2rem; margin: 1.5rem 0 0.5rem; }
-        p, address { font-style: normal; margin-bottom: 0.75rem; }
-        a { color: #0645ad; }
-        ul { margin: 0.5rem 0 1rem 1.25rem; }
-        .back { display: inline-block; margin-bottom: 1.5rem; }
+        .impressum h1 {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+        .impressum h2 {
+            font-size: 1.1rem;
+            margin: 1.5rem 0 0.5rem;
+            color: var(--color-accent);
+        }
+        .impressum p, .impressum address { font-style: normal; margin-bottom: 0.75rem; color: var(--color-muted); }
+        .impressum strong { color: var(--color-text); }
+        .impressum a { color: var(--color-accent-soft); }
+        .back { display: inline-block; margin-bottom: 1.5rem; color: var(--color-muted); text-decoration: none; }
+        .back:hover { color: var(--color-text); }
     </style>
 </head>
 <body>
     <a class="ai-note" href="/" title="Diese Seite wurde mit Unterstützung von KI erstellt" aria-label="Hinweis: Diese Seite wurde mit Unterstützung von KI erstellt. Zur Startseite.">✳ Mit KI erstellt</a>
-    <main>
+    <main class="impressum">
     <a class="back" href="/">&larr; Zurück zur Startseite</a>
     <h1>Impressum</h1>
 
