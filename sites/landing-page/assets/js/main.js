@@ -25,48 +25,15 @@
             action: "Aktivität starten"
         },
         {
-            id: "obacht",
-            title: "Obacht",
-            status: "In Entwicklung",
-            description: "Kontaktlose Sturz- und Bewegungserkennung auf Basis von WiFi-Sensing.",
-            meta: "Open Source · Powered by RuView",
-            accent: "#ff9365",
-            accentRgb: "255, 147, 101",
-            href: "",
-            action: "Projekt in Entwicklung"
-        },
-        {
-            id: "funkblick",
-            title: "Funkblick",
-            status: "Experiment",
-            description: "WiFi-Signale, Bewegung und Raumerfassung sichtbar und verständlich machen.",
-            meta: "Sensing · Analyse · Visualisierung",
-            accent: "#56d9e8",
-            accentRgb: "86, 217, 232",
-            href: "",
-            action: "Experiment in Vorbereitung"
-        },
-        {
-            id: "vorrat",
-            title: "Vorrat",
-            status: "Konzept",
-            description: "Ernten, Saatgut und eingelagerte Vorräte übersichtlich organisieren.",
-            meta: "Sammeln · Lagern · Wiederfinden",
-            accent: "#f6c85f",
-            accentRgb: "246, 200, 95",
-            href: "",
-            action: "Konzept in Vorbereitung"
-        },
-        {
-            id: "werkbank",
-            title: "Werkbank",
-            status: "Labor",
-            description: "Ein Platz für kleine Open-Source-Werkzeuge und neue Versuchsprojekte.",
-            meta: "Bauen · Erproben · Teilen",
-            accent: "#bd8cff",
-            accentRgb: "189, 140, 255",
-            href: "",
-            action: "Labor in Vorbereitung"
+            id: "punctum",
+            title: "Punctum",
+            status: "Bereit",
+            description: "Stoppuhr, Timer, Wecker und Pomodoro — präzise Zeit-Instrumente ohne Drift.",
+            meta: "Messen · Erinnern · Fokussieren",
+            accent: "#e8b3ff",
+            accentRgb: "232, 179, 255",
+            href: "https://punctum.pompui.de/",
+            action: "Aktivität starten"
         }
     ];
 
@@ -83,6 +50,7 @@
     const action = document.querySelector("[data-activity-action]");
     const flash = document.querySelector("[data-selection-flash]");
     const year = document.querySelector("[data-current-year]");
+    const clockTime = document.querySelector("[data-clock-time]");
 
     let activeIndex = 0;
     let changeToken = 0;
@@ -94,6 +62,16 @@
 
     if (year) {
         year.textContent = String(new Date().getFullYear());
+    }
+
+    // Live clock in the topbar
+    if (clockTime) {
+        const renderClock = () => {
+            const now = new Date();
+            clockTime.textContent = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+        };
+        renderClock();
+        setInterval(renderClock, 1000);
     }
 
     if (!carousel || tiles.length !== activities.length) {
@@ -163,8 +141,11 @@
             tile.style.setProperty("--tile-opacity", String(Math.max(0.46, 1 - distance * 0.2)));
             tile.style.setProperty("--tile-scale", String(1 - distance * 0.12));
             tile.style.setProperty("--tile-blur", distance > 1 ? "1px" : "0px");
+            // Dye each tile with its activity accent so icon and glow match
+            tile.style.setProperty("--tile-accent", activities[index].accent);
             tile.classList.toggle("is-active", isActive);
             tile.setAttribute("aria-current", String(isActive));
+            tile.setAttribute("aria-label", activities[index].title + (isActive ? " — erneut aktivieren zum Starten" : " auswählen"));
             tile.tabIndex = isActive ? 0 : -1;
         });
 
@@ -226,11 +207,17 @@
         selectActivity(activeIndex + direction, { focus: shouldFocus });
     };
 
-    tiles.forEach((tile, index) => {
-        tile.addEventListener("click", () => {
-            selectActivity(index, { focus: true });
+        tiles.forEach((tile, index) => {
+            tile.addEventListener("click", () => {
+                // Selected tile → launch the app; others → bring to center
+                if (index === activeIndex) {
+                    const activity = activities[index];
+                    if (activity.href) window.open(activity.href, "_self");
+                    return;
+                }
+                selectActivity(index, { focus: true });
+            });
         });
-    });
 
     document.querySelectorAll("[data-direction]").forEach((control) => {
         control.addEventListener("click", () => {
@@ -283,7 +270,22 @@
 
     carousel.addEventListener("pointerdown", (event) => {
         pointerStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
-        carousel.setPointerCapture(event.pointerId);
+        // Capture only on the carousel, NOT via setPointerCapture — capturing
+        // here retargets the later click event away from the tile, breaking
+        // tile activation. Capture is applied lazily on first drag move.
+    });
+
+    carousel.addEventListener("pointermove", (event) => {
+        if (!pointerStart || pointerStart.id !== event.pointerId) return;
+        if (pointerStart.dragging) return;
+        const dx = event.clientX - pointerStart.x;
+        const dy = event.clientY - pointerStart.y;
+        // Once the pointer moves like a drag, capture so leaving the tile
+        // still ends the gesture on the carousel.
+        if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
+            pointerStart.dragging = true;
+            try { carousel.setPointerCapture(event.pointerId); } catch { /* not supported */ }
+        }
     });
 
     carousel.addEventListener("pointerup", (event) => {

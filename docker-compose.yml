@@ -25,6 +25,18 @@ services:
       - web-network
     restart: always
 
+  pompui-punctum:
+    build: ./sites/punctum
+    container_name: pompui-punctum
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - pompui-network
+      - web-network
+    restart: always
+
   pompui-snapotter:
     image: snapotter/snapotter:latest
     container_name: pompui-snapotter
