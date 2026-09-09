@@ -13,6 +13,6 @@ networks:
   pompui-network:
     driver: bridge
   web-network:
-    # Shared external network created by the DHde project's global-proxy.
-    # Run once on the host:  docker network create web-network
+    # Shared network created by the DHde project's global-proxy.
+    name: daniel-hettichde_web-network
     external: true
