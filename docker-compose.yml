@@ -4,6 +4,10 @@ services:
   pompui-landing:
     build: ./sites/landing-page
     container_name: pompui-landing
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
     networks:
       - pompui-network
       - web-network
@@ -12,6 +16,10 @@ services:
   pompui-garden-journal:
     build: ./sites/garden-journal
     container_name: pompui-garden-journal
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
     networks:
       - pompui-network
       - web-network
