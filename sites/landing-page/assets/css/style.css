@@ -679,11 +679,11 @@ svg {
 
 .legal-layout {
     display: grid;
-    width: min(100%, 82rem);
+    width: min(100%, 62rem);
     margin-inline: auto;
     padding: clamp(2rem, 6vw, 5.5rem) var(--gutter);
-    grid-template-columns: minmax(12rem, 0.45fr) minmax(0, 1.55fr);
-    gap: clamp(2rem, 7vw, 7rem);
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
 }
 
 .legal-intro {
@@ -833,14 +833,6 @@ svg {
 
     .bottombar {
         justify-content: flex-end;
-    }
-
-    .legal-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .legal-intro {
-        position: static;
     }
 }
 
