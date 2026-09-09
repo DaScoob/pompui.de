@@ -1,15 +1,109 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pompui.de</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="POMPUI bündelt kleine, nützliche Webanwendungen an einem Ort.">
+    <meta name="theme-color" content="#07130f">
+    <title>POMPUI — Aktivitäten</title>
     <link rel="stylesheet" href="/assets/css/style.css">
+    <script src="/assets/js/main.js" defer></script>
 </head>
 <body>
-    <main>
-        <h1>pompui.de</h1>
-        <p>Bald verf&uuml;gbar &mdash; coming soon.</p>
+    <a class="skip-link" href="#activities">Zu den Aktivitäten springen</a>
+
+    <div class="ambient" aria-hidden="true">
+        <span class="ambient__orb ambient__orb--one"></span>
+        <span class="ambient__orb ambient__orb--two"></span>
+        <span class="ambient__grid"></span>
+    </div>
+
+    <header class="site-header">
+        <a class="brand" href="/" aria-label="POMPUI Startseite">
+            <span class="brand__mark" aria-hidden="true">
+                <svg viewBox="0 0 48 48" role="img">
+                    <path d="M14 31c0-8 4-14 10-18 6 4 10 10 10 18" />
+                    <path d="M24 12v24M17 23c3 0 5 1 7 4m7-9c-3 0-5 2-7 5" />
+                    <path d="M12 36h24" />
+                </svg>
+            </span>
+            <span class="brand__wordmark">POMPUI</span>
+        </a>
+
+        <p class="site-header__label">Home</p>
+    </header>
+
+    <main class="home-shell">
+        <section class="intro" aria-labelledby="page-title">
+            <p class="eyebrow">Deine Aktivitäten</p>
+            <h1 id="page-title">Wähle, was als Nächstes wächst.</h1>
+            <p class="intro__copy">Digitale Werkzeuge für Ideen, Projekte und alles, was daraus entsteht.</p>
+        </section>
+
+        <section class="activity-console" id="activities" aria-labelledby="activities-title">
+            <div class="activity-console__heading">
+                <div>
+                    <p class="section-index">01</p>
+                    <h2 id="activities-title">Aktivitäten</h2>
+                </div>
+
+                <div class="rail-controls" aria-label="Aktivitäten durchblättern">
+                    <button class="icon-button" type="button" data-scroll="previous" aria-label="Vorherige Aktivität">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+                    </button>
+                    <button class="icon-button" type="button" data-scroll="next" aria-label="Nächste Aktivität">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="activity-rail" data-activity-rail tabindex="0" aria-label="Verfügbare Aktivitäten">
+                <article class="activity-card activity-card--garden" data-activity-card>
+                    <a class="activity-card__link" href="https://gj.daniel-hettich.de/" aria-describedby="garden-description">
+                        <span class="activity-card__glow" aria-hidden="true"></span>
+                        <span class="activity-card__topline">
+                            <span class="activity-card__status">Bereit</span>
+                            <span class="activity-card__number">01</span>
+                        </span>
+
+                        <span class="activity-card__icon" aria-hidden="true">
+                            <svg viewBox="0 0 64 64">
+                                <path d="M32 53V27" />
+                                <path d="M32 34C22 34 14 28 13 17c11-1 18 4 19 17Z" />
+                                <path d="M32 28c1-10 8-16 19-16 0 11-8 17-19 16Z" />
+                                <path d="M18 53h28" />
+                            </svg>
+                        </span>
+
+                        <span class="activity-card__content">
+                            <span class="activity-card__category">Planen · Pflegen · Ernten</span>
+                            <strong>Gartenjournal</strong>
+                            <span id="garden-description">Beete gestalten, Kulturen verwalten und das Gartenjahr im Blick behalten.</span>
+                        </span>
+
+                        <span class="activity-card__action">
+                            Aktivität starten
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
+                        </span>
+                    </a>
+                </article>
+
+                <div class="activity-slot" aria-label="Platz für eine zukünftige Aktivität">
+                    <span class="activity-slot__plus" aria-hidden="true">+</span>
+                    <span>Mehr in Vorbereitung</span>
+                </div>
+            </div>
+
+            <div class="rail-hint" aria-hidden="true">
+                <span class="rail-hint__line"></span>
+                <span>Scrollen oder Pfeiltasten verwenden</span>
+            </div>
+        </section>
     </main>
+
+    <footer class="site-footer">
+        <p>Ein Ort für Projekte mit Charakter.</p>
+        <p>&copy; <span data-current-year>2026</span> POMPUI</p>
+    </footer>
 </body>
 </html>
