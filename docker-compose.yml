@@ -9,6 +9,14 @@ services:
       - web-network
     restart: always
 
+  pompui-garden-journal:
+    build: ./sites/garden-journal
+    container_name: pompui-garden-journal
+    networks:
+      - pompui-network
+      - web-network
+    restart: always
+
 networks:
   pompui-network:
     driver: bridge
