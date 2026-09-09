@@ -428,25 +428,8 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { opacity: 0.
 .foot a:hover { color: var(--text); }
 .foot p { margin: 0; }
 
-/* ---------- ai note (shared pattern) ---------- */
-
-.ai-note {
-    position: fixed;
-    z-index: 200;
-    top: 0.6rem;
-    left: 0.6rem;
-    padding: 0.25rem 0.6rem;
-    border: 1px solid currentColor;
-    border-radius: 999px;
-    font-size: 0.68rem;
-    letter-spacing: 0.02em;
-    opacity: 0.45;
-    background: rgba(0, 0, 0, 0.15);
-    color: var(--muted);
-    text-decoration: none;
-}
-
-.ai-note:hover { opacity: 0.85; }
+/* ai-note + home button come from the shared POMPUI chrome
+   (https://pompui.de/shared/pompui-chrome.css) */
 
 @media (max-width: 640px) {
     .topbar { justify-content: center; }

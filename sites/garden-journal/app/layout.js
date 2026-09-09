@@ -1,5 +1,5 @@
 import "./styles.css";
-import { AiNote } from "./components/ai-note.js";
+import { AiNote, HomeButton } from "./components/ai-note.js";
 
 export const metadata = {
   title: "Mein Gemüsegarten",
@@ -9,8 +9,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="de" data-theme="dark">
+      <head>
+        <link rel="stylesheet" href="https://pompui.de/shared/pompui-chrome.css" />
+      </head>
       <body>
         <AiNote />
+        <HomeButton />
         {children}
       </body>
     </html>
