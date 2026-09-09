@@ -57,6 +57,41 @@ These exist because this host runs **multiple projects** (see `ENVIRONMENT.md`):
 - Don't commit build artifacts, IDE settings or `node_modules/`.
 - German is the language of the user-facing content; code, commits and comments are in English (or German where already established).
 
+## AI-notice requirement (mandatory)
+
+This project discloses that its content, design, images and source code were created with AI assistance. Therefore **every new page must include the AI-notice badge**, and impressum pages must contain the "KI-Hinweis" section.
+
+**Badge** — fixed top-left, always visible, slightly transparent, links to `/impressum`:
+
+```html
+<a class="ai-note" href="/impressum" title="Diese Seite wurde mit Unterstützung von KI erstellt" aria-label="Hinweis: Diese Seite wurde mit Unterstützung von KI erstellt. Zum Impressum.">✳ Mit KI erstellt</a>
+```
+
+Static pages additionally need the badge CSS (already present in `sites/landing-page/assets/css/style.css`):
+
+```css
+.ai-note { position: fixed; z-index: 200; top: 0.6rem; left: 0.6rem; padding: 0.25rem 0.6rem; border: 1px solid currentColor; border-radius: 999px; font-size: 0.68rem; letter-spacing: 0.02em; opacity: 0.45; background: rgba(0, 0, 0, 0.15); color: inherit; text-decoration: none; }
+.ai-note:hover { opacity: 0.85; }
+```
+
+In the garden journal (Next.js/vinext) the badge is already global via `app/layout.js` (`<AiNote />` from `app/components/ai-note.js`) — new routes there don't need to add it manually.
+
+**Impressum "KI-Hinweis" section** (required text):
+
+```html
+<h2>KI-Hinweis</h2>
+<p>Alle Inhalte, das Design sowie die zugrunde liegenden Bilder und Quelltexte dieser Website
+wurden mit Unterstützung durch Künstliche Intelligenz (KI) erstellt und von
+Daniel Hettich kuratiert.</p>
+```
+
+Checklist for new pages/PRs:
+- [ ] AI badge present and linking to the impressum
+- [ ] Badge CSS included (static pages) or layout includes `<AiNote />` (garden journal)
+- [ ] If it's an impressum: "KI-Hinweis" section included
+
+A PR that adds a page without the badge will be asked to fix it before merge.
+
 ## Code of conduct
 
 Be decent to each other, review constructively, and remember: someone else may maintain your code after you.
