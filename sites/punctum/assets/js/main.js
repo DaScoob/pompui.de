@@ -196,6 +196,13 @@
             clampInt(timer.inputs.h, 23) * 3600000 +
             clampInt(timer.inputs.m, 59) * 60000 +
             clampInt(timer.inputs.s, 59) * 1000;
+        try {
+            localStorage.setItem("punctum-timer-inputs", JSON.stringify({
+                h: Number(timer.inputs.h.value) || 0,
+                m: Number(timer.inputs.m.value) || 0,
+                s: Number(timer.inputs.s.value) || 0
+            }));
+        } catch { /* storage blocked */ }
         timerRender();
     }
 
@@ -277,6 +284,16 @@
             timerUpdateButtons();
         });
     });
+
+    // Restore last timer inputs (localStorage, per browser)
+    try {
+        const saved = JSON.parse(localStorage.getItem("punctum-timer-inputs") || "null");
+        if (saved && typeof saved === "object") {
+            if (typeof saved.h === "number") timer.inputs.h.value = saved.h;
+            if (typeof saved.m === "number") timer.inputs.m.value = saved.m;
+            if (typeof saved.s === "number") timer.inputs.s.value = saved.s;
+        }
+    } catch { /* defaults */ }
 
     timerFromInputs();
     timerUpdateButtons();
