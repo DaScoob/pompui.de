@@ -553,3 +553,16 @@ html[data-theme="dark"] .duplicate-dialog { border-color: #465249; background: #
   .bed-card.fullscreen .bed-selection { min-height: 45px; margin-bottom: 6px; padding-block: 5px; }
   .bed-card.fullscreen .distance-note { margin-top: 4px; }
 }
+
+.impressum { max-width: 720px; margin: 0 auto; padding: 32px 20px 60px; color: var(--ink); line-height: 1.7; font-size: 13px; }
+.impressum-header nav a { color: var(--muted); text-decoration: none; font-size: 12px; }
+.impressum-header nav a:hover { color: var(--ink); }
+.impressum-heading { margin: 18px 0 26px; }
+.impressum-heading h1 { font-family: Georgia, serif; font-size: 28px; margin: 0 0 4px; }
+.impressum-heading p { margin: 0; color: var(--muted); font-size: 12px; }
+.impressum h2 { font-size: 14px; margin: 26px 0 8px; }
+.impressum section { margin-bottom: 4px; }
+.impressum p { margin: 0 0 8px; }
+.impressum address { font-style: normal; margin: 0 0 8px; }
+.impressum a { color: var(--ink); text-decoration: underline; }
+footer a { color: inherit; }

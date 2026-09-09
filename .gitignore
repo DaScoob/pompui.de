@@ -1,6 +1,7 @@
 secrets/
 .env
 etc/letsencrypt/
+node_modules/
 
 # Environments
 .envrc
