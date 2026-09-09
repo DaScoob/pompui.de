@@ -547,6 +547,57 @@
         pomoInputs.rounds.value = pomo.config.rounds;
     } catch { /* defaults */ }
 
+    /* ============================================================
+     * WHEEL + DRAG GESTURE on number inputs
+     * Mausrad über einem Eingabefeld ändert den Wert (±1, mit Shift ±5).
+     * Horizontal ziehen am Feld zählt ebenfalls hoch/runter.
+     * ============================================================ */
+
+    function bindWheelAdjust(input, max) {
+        input.addEventListener("wheel", (event) => {
+            if (input.disabled) return;
+            event.preventDefault();
+            const step = event.shiftKey ? 5 : 1;
+            const delta = event.deltaY < 0 ? step : -step;
+            const current = parseInt(input.value, 10) || 0;
+            const next = Math.max(Number(input.min) || 0, Math.min(max, current + delta));
+            input.value = next;
+            input.dispatchEvent(new Event("change", { bubbles: true }));
+            input.dispatchEvent(new Event("input", { bubbles: true }));
+        }, { passive: false });
+
+        let dragStart = null;
+        input.addEventListener("pointerdown", (event) => {
+            if (input.disabled) return;
+            dragStart = { x: event.clientX, value: parseInt(input.value, 10) || 0 };
+        });
+        input.addEventListener("pointermove", (event) => {
+            if (!dragStart || input.disabled) return;
+            const dx = event.clientX - dragStart.x;
+            if (Math.abs(dx) < 12) return;
+            const step = event.shiftKey ? 5 : 1;
+            const delta = dx > 0 ? step : -step;
+            const next = Math.max(Number(input.min) || 0, Math.min(max, dragStart.value + delta));
+            if (next !== parseInt(input.value, 10)) {
+                input.value = next;
+                input.dispatchEvent(new Event("change", { bubbles: true }));
+                input.dispatchEvent(new Event("input", { bubbles: true }));
+            }
+        });
+        const endDrag = () => { dragStart = null; };
+        input.addEventListener("pointerup", endDrag);
+        input.addEventListener("pointercancel", endDrag);
+        input.addEventListener("pointerleave", endDrag);
+    }
+
+    bindWheelAdjust(timer.inputs.h, 23);
+    bindWheelAdjust(timer.inputs.m, 59);
+    bindWheelAdjust(timer.inputs.s, 59);
+    bindWheelAdjust(pomoInputs.focus, 90);
+    bindWheelAdjust(pomoInputs.short, 30);
+    bindWheelAdjust(pomoInputs.long, 60);
+    bindWheelAdjust(pomoInputs.rounds, 10);
+
     window.addEventListener("beforeunload", () => {
         try {
             localStorage.setItem("punctum-pomodoro-config", JSON.stringify(pomo.config));
