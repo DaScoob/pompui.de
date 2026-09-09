@@ -12,8 +12,11 @@
 - **SSL Certificates**: `/etc/letsencrypt` on host → `/etc/nginx/ssl` inside `global-proxy`. Current cert only covers `*.daniel-hettich.de` — a pompui.de cert is still needed.
 
 ## Infrastructure Map
-- **global-proxy** (external, from DHde compose): nginx:alpine, SSL termination, routes `pompui.de`/`www.pompui.de` → `pompui-landing:80` via `pompui-landing.conf`.
+- **global-proxy** (external, from DHde compose): nginx:alpine, SSL termination, routes:
+  - `pompui.de` / `www.pompui.de` → `pompui-landing:80`
+  - `gj.pompui.de` → `pompui-garden-journal:3000`
 - **pompui-landing**: static landing page (nginx:alpine).
+- **pompui-garden-journal**: Garden Journal app ("Mein Gartenjournal", Next.js/vinext on Node 22, port 3000).
 
 ## Deployment
 1. `docker compose up -d --build` in this directory (builds `pompui-landing`, joins external `web-network`).
