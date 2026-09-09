@@ -13,10 +13,12 @@
 
 ## Infrastructure Map
 - **global-proxy** (external, from DHde compose): nginx:alpine, SSL termination, routes:
-  - `pompui.de` / `www.pompui.de` → `pompui-landing:80`
+  - `pompui.de` / `www.pompui.de` → `pompui-landing:8080`
   - `gj.pompui.de` → `pompui-garden-journal:3000`
-- **pompui-landing**: static landing page (nginx:alpine).
+  - `snapotter.pompui.de` → `pompui-snapotter:1349`
+- **pompui-landing**: static landing page (nginx-unprivileged:alpine, non-root, port 8080).
 - **pompui-garden-journal**: Garden Journal app ("Mein Gartenjournal", Next.js/vinext on Node 22, port 3000).
+- **pompui-snapotter**: SnapOtter 2.2.0 file-processing suite (AGPL-3.0, embedded PostgreSQL/Redis, port 1349). **Licence compliance is mandatory** — see `sites/snapotter/LICENSE-COMPLIANCE.md` before updating it: pin image digest, update source offer. Auth enabled, telemetry off, password in `secrets/snapotter-password`.
 
 ## Deployment
 1. `docker compose up -d --build` in this directory (builds `pompui-landing`, joins external `web-network`).
