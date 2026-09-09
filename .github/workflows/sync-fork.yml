@@ -1,0 +1,28 @@
+name: Sync fork
+
+on:
+  push:
+    branches:
+      - automation/sync-fork
+    paths:
+      - .github/sync-fork-trigger
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Sync main with upstream
+        env:
+          GH_TOKEN_TOKEN: ${{ github.token }}
+          REPOSIT_REPO: ${{ github.repository }}
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2026-03-10" \
+            "repos/${REMEMBER_REPO}/merge-upstream" \
+            --field branch=main
