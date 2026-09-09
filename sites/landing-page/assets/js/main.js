@@ -270,7 +270,22 @@
 
     carousel.addEventListener("pointerdown", (event) => {
         pointerStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
-        carousel.setPointerCapture(event.pointerId);
+        // Capture only on the carousel, NOT via setPointerCapture — capturing
+        // here retargets the later click event away from the tile, breaking
+        // tile activation. Capture is applied lazily on first drag move.
+    });
+
+    carousel.addEventListener("pointermove", (event) => {
+        if (!pointerStart || pointerStart.id !== event.pointerId) return;
+        if (pointerStart.dragging) return;
+        const dx = event.clientX - pointerStart.x;
+        const dy = event.clientY - pointerStart.y;
+        // Once the pointer moves like a drag, capture so leaving the tile
+        // still ends the gesture on the carousel.
+        if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
+            pointerStart.dragging = true;
+            try { carousel.setPointerCapture(event.pointerId); } catch { /* not supported */ }
+        }
     });
 
     carousel.addEventListener("pointerup", (event) => {
