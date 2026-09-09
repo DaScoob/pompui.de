@@ -23,6 +23,17 @@
             accentRgb: "86, 181, 247",
             href: "https://snapotter.pompui.de/",
             action: "Aktivität starten"
+        },
+        {
+            id: "punctum",
+            title: "Punctum",
+            status: "Bereit",
+            description: "Stoppuhr, Timer, Wecker und Pomodoro — präzise Zeit-Instrumente ohne Drift.",
+            meta: "Messen · Erinnern · Fokussieren",
+            accent: "#e8b3ff",
+            accentRgb: "232, 179, 255",
+            href: "https://punctum.pompui.de/",
+            action: "Aktivität starten"
         }
     ];
 
