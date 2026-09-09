@@ -23,7 +23,9 @@
 ## Deployment
 1. `docker compose up -d --build` in this directory (builds `pompui-landing`, joins external `web-network`).
 2. Copy `infrastructure/nginx/conf.d/pompui-landing.conf` into `/var/www/daniel-hettich.de/infrastructure/nginx/conf.d/` (this is the directory volume-mounted into `global-proxy`).
-3. Reload proxy: `docker exec global-proxy nginx -t && docker exec global-proxy nginx -s reload` (requires docker access).
+3. **Restart** the proxy whenever containers were **recreated** (new IPs): `docker restart global-proxy`.
+   - ⚠️ Gotcha: `nginx -s reload` alone does NOT re-resolve upstream container names — recreated containers get new IPs and the proxy keeps connecting to stale ones (502s with `Connection refused` to wrong IPs). A full restart re-resolves.
+   - `nginx -s reload` is fine after conf *text* changes when no container was recreated.
 4. Ensure a valid pompui.de certificate exists in `/etc/letsencrypt` and fix the cert paths in the conf file.
 
 ## Scaling & Extensibility
