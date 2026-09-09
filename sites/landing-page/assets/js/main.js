@@ -19,8 +19,8 @@
             status: "Bereit",
             description: "200+ Werkzeuge für Bilder, Video, Audio, PDFs und Dokumente — auf deinem eigenen Server.",
             meta: "Konvertieren · Komprimieren · KI · AGPL-3.0",
-            accent: "#62b6f7",
-            accentRgb: "86, 181, 247",
+            accent: "#e07832",
+            accentRgb: "224, 120, 50",
             href: "https://snapotter.pompui.de/",
             action: "Aktivität starten"
         },
@@ -30,8 +30,8 @@
             status: "Bereit",
             description: "Stoppuhr, Timer, Wecker und Pomodoro — präzise Zeit-Instrumente ohne Drift.",
             meta: "Messen · Erinnern · Fokussieren",
-            accent: "#e8b3ff",
-            accentRgb: "232, 179, 255",
+            accent: "#b28cff",
+            accentRgb: "178, 140, 255",
             href: "https://punctum.pompui.de/",
             action: "Aktivität starten"
         }
