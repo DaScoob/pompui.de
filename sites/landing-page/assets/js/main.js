@@ -50,6 +50,7 @@
     const action = document.querySelector("[data-activity-action]");
     const flash = document.querySelector("[data-selection-flash]");
     const year = document.querySelector("[data-current-year]");
+    const clockTime = document.querySelector("[data-clock-time]");
 
     let activeIndex = 0;
     let changeToken = 0;
@@ -61,6 +62,16 @@
 
     if (year) {
         year.textContent = String(new Date().getFullYear());
+    }
+
+    // Live clock in the topbar
+    if (clockTime) {
+        const renderClock = () => {
+            const now = new Date();
+            clockTime.textContent = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+        };
+        renderClock();
+        setInterval(renderClock, 1000);
     }
 
     if (!carousel || tiles.length !== activities.length) {
@@ -130,6 +141,8 @@
             tile.style.setProperty("--tile-opacity", String(Math.max(0.46, 1 - distance * 0.2)));
             tile.style.setProperty("--tile-scale", String(1 - distance * 0.12));
             tile.style.setProperty("--tile-blur", distance > 1 ? "1px" : "0px");
+            // Dye each tile with its activity accent so icon and glow match
+            tile.style.setProperty("--tile-accent", activities[index].accent);
             tile.classList.toggle("is-active", isActive);
             tile.setAttribute("aria-current", String(isActive));
             tile.tabIndex = isActive ? 0 : -1;
