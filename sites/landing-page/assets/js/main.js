@@ -137,12 +137,18 @@
     };
 
     const updateTiles = (shouldFocus) => {
+        const isCompact = window.innerWidth <= 768;
+        const minimumStep = isCompact ? 96 : 112;
+        const maximumStep = isCompact ? 128 : 192;
+        const step = Math.max(minimumStep, Math.min(window.innerHeight * 0.17, maximumStep));
+
         tiles.forEach((tile, index) => {
             const offset = circularOffset(index);
             const distance = Math.abs(offset);
             const isActive = index === activeIndex;
 
             tile.style.setProperty("--offset", String(offset));
+            tile.style.setProperty("--tile-shift", `${(offset * step).toFixed(2)}px`);
             tile.style.setProperty("--tile-opacity", String(Math.max(0.46, 1 - distance * 0.2)));
             tile.style.setProperty("--tile-scale", String(1 - distance * 0.12));
             tile.style.setProperty("--tile-blur", distance > 1 ? "1px" : "0px");
@@ -286,6 +292,12 @@
     carousel.addEventListener("pointercancel", () => {
         pointerStart = null;
     });
+
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(() => updateTiles(false), 100);
+    }, { passive: true });
 
     window.addEventListener("pointermove", (event) => {
         if (event.pointerType === "touch" || sceneFrame) {
