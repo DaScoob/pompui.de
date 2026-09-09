@@ -56,5 +56,8 @@ test("punctum html: tile ids match JS activity ids (if array present)", () => {
     assert.ok(html.includes('data-mode="timer"'), "timer tab");
     assert.ok(html.includes('data-mode="alarm"'), "alarm tab");
     assert.ok(html.includes('data-mode="pomodoro"'), "pomodoro tab");
-    assert.ok(html.includes("data-ai-note") || html.includes("ai-note"), "AI notice present");
+    assert.ok(
+        html.includes("pompui-chrome.js") || html.includes("ai-note"),
+        "AI notice present (shared chrome or inline badge)"
+    );
 });

@@ -74,18 +74,29 @@
     const tabs = $$("[data-mode]");
     const panels = Object.fromEntries($$("[data-panel]").map((p) => [p.dataset.panel, p]));
 
+    const activateMode = (mode) => {
+        tabs.forEach((t) => {
+            const on = t.dataset.mode === mode;
+            t.classList.toggle("is-active", on);
+            t.setAttribute("aria-pressed", String(on));
+        });
+        Object.entries(panels).forEach(([id, el]) => {
+            el.hidden = id !== mode;
+        });
+    };
+
     tabs.forEach((tab) => {
         tab.addEventListener("click", () => {
-            tabs.forEach((t) => {
-                const on = t === tab;
-                t.classList.toggle("is-active", on);
-                t.setAttribute("aria-pressed", String(on));
-            });
-            Object.entries(panels).forEach(([id, el]) => {
-                el.hidden = id !== tab.dataset.mode;
-            });
+            activateMode(tab.dataset.mode);
+            try { localStorage.setItem("punctum-last-mode", tab.dataset.mode); } catch { /* storage blocked */ }
         });
     });
+
+    // Restore the last used mode (localStorage, per browser)
+    try {
+        const savedMode = localStorage.getItem("punctum-last-mode");
+        if (savedMode && panels[savedMode]) activateMode(savedMode);
+    } catch { /* storage blocked — default tab */ }
 
     /* ============================================================
      * STOPWATCH

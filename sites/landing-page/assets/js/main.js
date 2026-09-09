@@ -54,6 +54,18 @@
 
     let activeIndex = 0;
     let changeToken = 0;
+
+    // Restore the last selected activity (localStorage, per browser)
+    try {
+        const savedId = localStorage.getItem("pompui-last-activity");
+        const savedIndex = activities.findIndex((a) => a.id === savedId);
+        if (savedIndex > 0) {
+            activeIndex = savedIndex;
+            document.body.dataset.theme = activities[savedIndex].id;
+            root.style.setProperty("--accent", activities[savedIndex].accent);
+            root.style.setProperty("--accent-rgb", activities[savedIndex].accentRgb);
+        }
+    } catch { /* storage blocked — default to first activity */ }
     let wheelTotal = 0;
     let wheelLocked = false;
     let wheelResetTimer;
@@ -195,6 +207,7 @@
         root.style.setProperty("--accent", activity.accent);
         root.style.setProperty("--accent-rgb", activity.accentRgb);
         page.dataset.theme = activity.id;
+        try { localStorage.setItem("pompui-last-activity", activity.id); } catch { /* storage blocked */ }
         updateTiles(Boolean(options.focus));
         updateDetails(activity, changeToken);
 
@@ -326,5 +339,6 @@
         });
     }, { passive: true });
 
-    updateTiles(false);
+    // Sync the whole UI to the restored (or default) selection
+    selectActivity(activeIndex, { focus: false });
 }());
