@@ -25,6 +25,52 @@ services:
       - web-network
     restart: always
 
+  pompui-snapotter:
+    image: snapotter/snapotter:latest
+    container_name: pompui-snapotter
+    # Embedded mode (in-container Postgres 17 + Redis 8): no DATABASE_URL/REDIS_URL
+    environment:
+      - AUTH_ENABLED=true
+      - DEFAULT_USERNAME=admin
+      - DEFAULT_PASSWORD_FILE=/run/secrets/snapotter_password
+      - SNAPOTTER_ANALYTICS=off
+      - TRUST_PROXY=loopback,linklocal,uniquelocal
+      - EXTERNAL_URL=https://snapotter.pompui.de
+    volumes:
+      - pompui-snapotter-data:/data
+      - pompui-snapotter-workspace:/tmp/workspace
+      - ./secrets/snapotter-password:/run/secrets/snapotter_password:ro
+    networks:
+      - pompui-network
+      - web-network
+    restart: always
+    # --- Security hardening (from upstream docker-compose.yml) ---
+    mem_limit: 2500m
+    memswap_limit: 2500m
+    cpus: 2
+    pids_limit: 512
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETUID
+      - SETGID
+      - DAC_OVERRIDE
+      - FOWNER
+      - KILL
+    security_opt:
+      - no-new-privileges:true
+    shm_size: '1gb'
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"
+        max-file: "3"
+
+volumes:
+  pompui-snapotter-data:
+  pompui-snapotter-workspace:
+
 networks:
   pompui-network:
     driver: bridge
