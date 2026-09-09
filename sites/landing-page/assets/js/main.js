@@ -23,50 +23,6 @@
             accentRgb: "86, 181, 247",
             href: "https://snapotter.pompui.de/",
             action: "Aktivität starten"
-        },
-        {
-            id: "obacht",
-            title: "Obacht",
-            status: "In Entwicklung",
-            description: "Kontaktlose Sturz- und Bewegungserkennung auf Basis von WiFi-Sensing.",
-            meta: "Open Source · Powered by RuView",
-            accent: "#ff9365",
-            accentRgb: "255, 147, 101",
-            href: "",
-            action: "Projekt in Entwicklung"
-        },
-        {
-            id: "funkblick",
-            title: "Funkblick",
-            status: "Experiment",
-            description: "WiFi-Signale, Bewegung und Raumerfassung sichtbar und verständlich machen.",
-            meta: "Sensing · Analyse · Visualisierung",
-            accent: "#56d9e8",
-            accentRgb: "86, 217, 232",
-            href: "",
-            action: "Experiment in Vorbereitung"
-        },
-        {
-            id: "vorrat",
-            title: "Vorrat",
-            status: "Konzept",
-            description: "Ernten, Saatgut und eingelagerte Vorräte übersichtlich organisieren.",
-            meta: "Sammeln · Lagern · Wiederfinden",
-            accent: "#f6c85f",
-            accentRgb: "246, 200, 95",
-            href: "",
-            action: "Konzept in Vorbereitung"
-        },
-        {
-            id: "werkbank",
-            title: "Werkbank",
-            status: "Labor",
-            description: "Ein Platz für kleine Open-Source-Werkzeuge und neue Versuchsprojekte.",
-            meta: "Bauen · Erproben · Teilen",
-            accent: "#bd8cff",
-            accentRgb: "189, 140, 255",
-            href: "",
-            action: "Labor in Vorbereitung"
         }
     ];
 
