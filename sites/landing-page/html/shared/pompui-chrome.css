@@ -35,7 +35,8 @@
 
 .pompui-chrome__home {
     bottom: 0.6rem;
-    left: 0.6rem;
+    left: 50%;
+    transform: translateX(-50%);
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
@@ -63,7 +64,12 @@
     stroke-linejoin: round;
 }
 
+/* Reserve space so the fixed centered Home button never covers footer text */
+body.pompui-chrome-mounted {
+    padding-bottom: 3.2rem;
+}
 @media print {
     .pompui-chrome__ai-note,
     .pompui-chrome__home { display: none; }
 }
+
