@@ -1666,7 +1666,7 @@ export default function GardenApp() {
         </section>
       )}
 
-      <footer><span>Mein Gemüsegarten</span><p>Alle Daten bleiben in diesem Browser gespeichert. · <a href="/impressum">Impressum</a></p><span>Version 1.6</span></footer>
+      <footer><span>Mein Gemüsegarten</span><p>Alle Daten bleiben in diesem Browser gespeichert. · <a href="/impressum">Impressum</a> · <a href="https://pompui.de/datenschutz">Datenschutz</a></p><span>Version 1.6</span></footer>
       {notice && <div className="toast" role="status">✓ {notice}</div>}
       {undoState && <div className="toast undo-toast" role="status"><span>{undoState.message}</span><button type="button" onClick={restoreLastRemoval}>Rückgängig</button></div>}
       <ConfirmDialog request={deleteRequest} onCancel={() => setDeleteRequest(null)} onConfirm={confirmDeletion} />
