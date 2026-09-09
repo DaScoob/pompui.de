@@ -415,7 +415,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { opacity: 0.
 
 .foot {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     gap: 1rem;
     padding: 1.2rem clamp(1.25rem, 4vw, 3rem);
