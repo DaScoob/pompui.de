@@ -81,6 +81,7 @@ svg {
 
 .skip-link:focus {
     transform: translateY(0);
+    top: 2.4rem;
 }
 
 .ambient {
@@ -595,4 +596,25 @@ svg {
         scroll-behavior: auto !important;
         transition-duration: 0.01ms !important;
     }
+}
+/* AI notice badge - fixed top-left, always visible, slightly transparent */
+.ai-note {
+    position: fixed;
+    top: 0.6rem;
+    left: 0.6rem;
+    z-index: 200;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+    opacity: 0.45;
+    background: rgba(0, 0, 0, 0.15);
+    color: inherit;
+    text-decoration: none;
+    pointer-events: auto;
+}
+
+.ai-note:hover {
+    opacity: 0.85;
 }

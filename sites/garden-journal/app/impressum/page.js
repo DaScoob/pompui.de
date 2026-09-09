@@ -12,6 +12,14 @@ export default function ImpressumPage() {
       <PageHeader title="Impressum" subtitle="Angaben gemäß § 5 DDG" backHref="/" backLabel="Zurück zum Gartenjournal" />
 
       <section>
+        <h2>KI-Hinweis</h2>
+        <p>
+          Alle Inhalte, das Design sowie die zugrunde liegenden Bilder und Quelltexte dieser Website wurden mit Unterstützung durch Künstliche
+          Intelligenz (KI) erstellt und von Daniel Hettich kuratiert.
+        </p>
+      </section>
+
+      <section>
         <h2>Anbieter</h2>
         <address>
           <strong>Daniel Hettich</strong>

@@ -1,4 +1,5 @@
 import "./styles.css";
+import { AiNote } from "./components/ai-note.js";
 
 export const metadata = {
   title: "Mein Gemüsegarten",
@@ -8,7 +9,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="de" data-theme="dark">
-      <body>{children}</body>
+      <body>
+        <AiNote />
+        {children}
+      </body>
     </html>
   );
 }
