@@ -272,6 +272,7 @@ svg {
     width: 100%;
     aspect-ratio: 1;
     border: 0;
+    color-scheme: light;
 }
 
 .hero-logo__art img {
