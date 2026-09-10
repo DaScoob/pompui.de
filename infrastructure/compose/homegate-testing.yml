@@ -1,0 +1,42 @@
+# HomeGate testing/debugging stack (explicit override — NOT auto-loaded).
+#
+# This server exists to implement, test and debug this project. Nothing is
+# published from here before being verified, so the stack is HTTP-only and
+# site containers are exposed directly — no global-proxy, no TLS.
+#
+# Port plan on this host (one direct HTTP port per project/site):
+#   daniel-hettich.de        -> 6009 (DHde repo)
+#   pompui.de (landing)      -> 6010 (this repo)
+#   punctum.pompui.de        -> 6012 (this repo; 6011 is taken by open-webui)
+#   gj.pompui.de             -> 6013 (this repo)
+#   snapotter.pompui.de      -> excluded: needs secrets/snapotter-password and
+#                               is resource-heavy; not required for testing
+#
+# The external `web-network` (created by the DHde project) is not needed in
+# this workflow; joining it would fail when the DHde stack is not up.
+#
+# Usage (paths in override files resolve against the first compose file's dir):
+#   docker compose -f docker-compose.yml -f infrastructure/compose/homegate-testing.yml up -d --build
+
+services:
+  pompui-landing:
+    ports: !override
+      - "6010:8080"
+    networks: !override
+      - pompui-network
+
+  pompui-garden-journal:
+    ports: !override
+      - "6013:3000"
+    networks: !override
+      - pompui-network
+
+  pompui-punctum:
+    ports: !override
+      - "6012:8080"
+    networks: !override
+      - pompui-network
+
+  pompui-snapotter:
+    profiles:
+      - not-on-testing-host
