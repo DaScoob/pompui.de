@@ -2,9 +2,21 @@
 
 ## Environment
 - **Project Root**: `/var/www/pompui.de`
+- **Testing Host**: `/home/daniel/Projects/pompui.de` (HomeGate home server — implement, test and debug only; nothing is published from here, HTTP-only workflow)
 - **Domain**: `pompui.de` (+ `www.pompui.de`)
-- **Architecture**: Dockerized. Static nginx containers; traffic enters via the **shared global-proxy** (`global-proxy` container, owned by the DHde project) which terminates SSL on ports 80/443 and routes by `server_name`.
+- **Architecture**: Dockerized. Static nginx containers; production traffic enters via the **shared global-proxy** (`global-proxy` container, owned by the DHde project) which terminates SSL on ports 80/443 and routes by `server_name`.
 - See `ENVIRONMENT.md` for full server details.
+
+## Testing Host (HomeGate)
+- The stack runs via a compose override: `docker compose -f docker-compose.yml -f infrastructure/compose/homegate-testing.yml up -d --build`
+- Containers are exposed **directly** (HTTP, no proxy, no TLS), one port per site:
+  - `pompui.de` (landing) → **6010**
+  - `punctum.pompui.de` → **6012** (6011 is taken by open-webui on this host)
+  - `gj.pompui.de` → **6013**
+- `pompui-snapotter` is parked under the `not-on-testing-host` profile (needs `secrets/snapotter-password`, resource-heavy; not required here).
+- The external `web-network` join is overridden away — the DHde stack does not need to be running for testing this repo.
+- daniel-hettich.de testing runs directly on **6009** from the DHde repo (see its AGENTS.md).
+- Verify: `curl http://192.168.178.60:6010/` (or `http://<LAN-IP>:<port>` from any device).
 
 ## Credentials & Secrets
 - **GitHub Repository**: `https://github.com/GitMinIT/pompui.de.git`
