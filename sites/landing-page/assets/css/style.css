@@ -247,6 +247,39 @@ svg {
     container-type: size;
 }
 
+.hero-panel {
+    display: grid;
+    width: 100%;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: clamp(1rem, 4vw, 4rem);
+}
+
+.hero-logo {
+    width: min(31vw, 47dvh, 30rem);
+    min-width: 11rem;
+    align-self: center;
+    color: var(--accent);
+    filter: drop-shadow(0 0 1.8rem rgba(var(--accent-rgb), 0.22));
+    transition:
+        color 600ms var(--ease-out),
+        filter 600ms var(--ease-out);
+}
+
+.hero-logo__art {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    border: 0;
+}
+
+.hero-logo__art img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
 .activity-details {
     align-self: end;
     width: min(46rem, 72vw);
@@ -827,6 +860,15 @@ svg {
         width: min(100%, 34rem);
     }
 
+    .hero-panel {
+        gap: clamp(0.5rem, 2.5vw, 1rem);
+    }
+
+    .hero-logo {
+        width: clamp(6.5rem, 27vw, 10rem);
+        min-width: 0;
+    }
+
     .carousel-control {
         display: none;
     }
@@ -878,6 +920,11 @@ svg {
     .activity-tile {
         width: clamp(4.6rem, 17dvh, 6rem);
     }
+
+    .hero-logo {
+        width: min(22vw, 30dvh);
+        min-width: 6rem;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -893,7 +940,8 @@ svg {
 
 @media (forced-colors: active) {
     .scene,
-    .activity-tile__shine {
+    .activity-tile__shine,
+    .hero-logo {
         display: none;
     }
 

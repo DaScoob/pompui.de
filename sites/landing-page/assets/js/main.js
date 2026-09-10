@@ -51,9 +51,24 @@
     const flash = document.querySelector("[data-selection-flash]");
     const year = document.querySelector("[data-current-year]");
     const clockTime = document.querySelector("[data-clock-time]");
+    const logoObject = document.querySelector("[data-pompui-logo]");
 
     let activeIndex = 0;
     let changeToken = 0;
+
+    const updateLogoAccent = (accent) => {
+        if (!logoObject || !logoObject.contentDocument) {
+            return;
+        }
+
+        logoObject.contentDocument.documentElement.style.setProperty("--pompui-glow", accent);
+    };
+
+    if (logoObject) {
+        logoObject.addEventListener("load", () => {
+            updateLogoAccent(activities[activeIndex].accent);
+        });
+    }
 
     // Restore the last selected activity (localStorage, per browser)
     try {
@@ -206,6 +221,7 @@
 
         root.style.setProperty("--accent", activity.accent);
         root.style.setProperty("--accent-rgb", activity.accentRgb);
+        updateLogoAccent(activity.accent);
         page.dataset.theme = activity.id;
         try { localStorage.setItem("pompui-last-activity", activity.id); } catch { /* storage blocked */ }
         updateTiles(Boolean(options.focus));
