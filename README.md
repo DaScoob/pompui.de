@@ -28,4 +28,4 @@ docker compose up -d --build
 - Remote: `https://github.com/GitMinIT/pompui.de.git`
 - Default branch: `main`
 - Never commit secrets (`secrets/` and `.env` are git-ignored).
-- Licence: [MIT](/LICENSE) — SnapOtter itself remains AGPL-3.0 (upstream, not part of this repo).
+- Licence: [MIT](/LICENSE) for code — **content** (texts, design, images under `sites/*/html/`, e.g. impressum, Datenschutzerklärung, page copy) is © Daniel Hettich, all rights reserved, not covered by the MIT licence. SnapOtter itself remains AGPL-3.0 (upstream, not part of this repo).

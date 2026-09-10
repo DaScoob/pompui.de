@@ -17,12 +17,12 @@ jobs:
     steps:
       - name: Sync main with upstream
         env:
-          GH_TOKEN_TOKEN: ${{ github.token }}
-          REPOSIT_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
         run: |
           gh api \
             --method POST \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2026-03-10" \
-            "repos/${REMEMBER_REPO}/merge-upstream" \
+            "repos/${REPO}/merge-upstream" \
             --field branch=main

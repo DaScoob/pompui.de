@@ -1,4 +1,4 @@
-# Security Audit — Server `ubuntu` (31.70.133.143)
+# Security Audit — Server `ubuntu` (IP redacted for publication)
 
 **Audit date:** 2026-09-09 · **Scope:** host, Docker containers, global-proxy, both websites
 **Rating summary:** 🟢 Good baseline · 🟡 Hardening recommended · 🔴 Act now
@@ -49,7 +49,7 @@
 ## 🟡 Recommended hardening
 
 ### 3. nginx default vhost serves content for unknown Hosts
-- Requests to `https://31.70.133.143` or `Host: evil.example.com` fall into the first server block and serve daniel-hettich.de (HTTP 200). This invites host-header fuzzing and gives scanners a landing page.
+- Requests to `https://<server-ip>` or `Host: evil.example.com` fall into the first server block and serve daniel-hettich.de (HTTP 200). This invites host-header fuzzing and gives scanners a landing page.
 - **Fix:** add a catch-all first server block returning `444` (close connection):
   ```nginx
   server {

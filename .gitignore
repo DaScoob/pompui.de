@@ -13,3 +13,8 @@ __pycache__/
 *.py[codz]
 *.egg-info/
 .ipynb_checkpoints
+# garden-journal build artifacts
+sites/garden-journal/.next/
+sites/garden-journal/.wrangler/
+sites/garden-journal/dist/
+sites/garden-journal/next-env.d.ts
