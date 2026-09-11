@@ -6,7 +6,10 @@
     <meta name="description" content="POMPUI bündelt offene, nützliche Webanwendungen an einem Ort.">
     <meta name="theme-color" content="#07110f">
     <title>POMPUI — Aktivitäten</title>
+    <script src="/assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="/assets/css/style.css">
+    <script src="/assets/js/theme.js" defer></script>
+    <script src="/assets/js/logo-theme.js" defer></script>
     <script src="/assets/js/main.js" defer></script>
 </head>
 <body class="home-page" data-theme="garden">
@@ -25,18 +28,23 @@
         <header class="topbar">
             <a class="brand" href="/" aria-label="POMPUI Startseite">
                 <span class="brand__mark" aria-hidden="true">
-                    <svg viewBox="0 0 48 48">
-                        <path d="M14 31c0-8 4-14 10-18 6 4 10 10 10 18" />
-                        <path d="M24 12v24M17 23c3 0 5 1 7 4m7-9c-3 0-5 2-7 5" />
-                        <path d="M12 36h24" />
-                    </svg>
+                    <span class="logo-stack logo-stack--brand">
+                        <object class="logo-variant" data-pompui-logo data-logo-mode="dark" data="/assets/img/pompui-logo-dark.svg?v=1" type="image/svg+xml" tabindex="-1"></object>
+                        <object class="logo-variant" data-pompui-logo data-logo-mode="light" data="/assets/img/pompui-logo-light.svg?v=1" type="image/svg+xml" tabindex="-1"></object>
+                    </span>
                 </span>
                 <span class="brand__wordmark">POMPUI</span>
             </a>
 
-            <div class="topbar__context" data-clock aria-label="Aktuelle Uhrzeit">
-                <span class="topbar__dot"></span>
-                <span data-clock-time>--:--</span>
+            <div class="topbar__actions">
+                <div class="topbar__context" data-clock aria-label="Aktuelle Uhrzeit">
+                    <span class="topbar__dot"></span>
+                    <span data-clock-time>--:--</span>
+                </div>
+                <button class="theme-toggle" type="button" data-color-mode-toggle aria-label="Lightmode aktivieren" aria-pressed="false">
+                    <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3l1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3l1.42-1.42"/></svg>
+                    <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 15.2A8.5 8.5 0 0 1 8.8 3.8 8.5 8.5 0 1 0 20.2 15.2Z"/></svg>
+                </button>
             </div>
         </header>
 
@@ -63,16 +71,11 @@
                 </div>
             </section>
 
-                <div class="hero-logo">
-                    <object
-                        class="hero-logo__art"
-                        data-pompui-logo
-                        data="/assets/img/pompui-otter-master-layered.svg?v=1"
-                        type="image/svg+xml"
-                        role="img"
-                        aria-label="POMPUI Otter-Logo">
-                        <img src="/assets/img/pompui-otter-master-layered.svg?v=1" alt="">
-                    </object>
+                <div class="hero-logo" role="img" aria-label="POMPUI Otter-Logo">
+                    <div class="logo-stack logo-stack--hero" aria-hidden="true">
+                        <object class="logo-variant" data-pompui-logo data-logo-mode="dark" data="/assets/img/pompui-logo-dark.svg?v=1" type="image/svg+xml" tabindex="-1"></object>
+                        <object class="logo-variant" data-pompui-logo data-logo-mode="light" data="/assets/img/pompui-logo-light.svg?v=1" type="image/svg+xml" tabindex="-1"></object>
+                    </div>
                 </div>
             </div>
 

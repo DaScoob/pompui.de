@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, follow">
+    <meta name="theme-color" content="#07110f">
     <title>Datenschutzerklärung – pompui.de</title>
+    <script src="/assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="/assets/css/style.css">
+    <script src="/assets/js/theme.js" defer></script>
     <style>
         .impressum {
             max-width: 720px;
@@ -20,10 +23,13 @@
         .back { display: inline-block; margin-bottom: 1.5rem; text-decoration: none; }
     </style>
 </head>
-<body data-theme="dark">
+<body class="legal-page legal-page--simple">
     <a class="ai-note" href="/impressum" title="Diese Seite wurde mit Unterstützung von KI erstellt" aria-label="Hinweis: Diese Seite wurde mit Unterstützung von KI erstellt. Zum Impressum.">✳ Mit KI erstellt</a>
     <div class="theme-switch">
-        <button id="theme-toggle" class="theme-btn" title="Toggle Theme">🌙</button>
+        <button class="theme-toggle" type="button" data-color-mode-toggle aria-label="Lightmode aktivieren" aria-pressed="false">
+            <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3l1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3l1.42-1.42"/></svg>
+            <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 15.2A8.5 8.5 0 0 1 8.8 3.8 8.5 8.5 0 1 0 20.2 15.2Z"/></svg>
+        </button>
     </div>
     <main class="impressum">
         <a class="back" href="/">&larr; Zurück zur Startseite</a>
@@ -137,6 +143,5 @@
         stets den aktuellen rechtlichen Anforderungen entspricht. Es gilt die jeweils
         auf dieser Seite veröffentlichte Fassung.</p>
     </main>
-    <script src="/assets/js/main.js"></script>
 </body>
 </html>
