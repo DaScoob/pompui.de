@@ -3,8 +3,8 @@
  * --muted / --line; falls back to the POMPUI console palette. */
 
 :root {
-    --pompui-chrome-accent: var(--accent, #9bea75);
-    --pompui-chrome-text: var(--text, #f3f7f4);
+    --pompui-chrome-accent: var(--accent, var(--green, #9bea75));
+    --pompui-chrome-text: var(--text, var(--ink, #f3f7f4));
     --pompui-chrome-muted: var(--muted, #9aada5);
     --pompui-chrome-line: var(--line, rgba(224, 241, 232, 0.14));
 }
@@ -23,17 +23,27 @@
     top: 0.6rem;
     left: 50%;
     padding: 0.25rem 0.6rem;
-    border: 1px solid currentColor;
+    border: 1px solid color-mix(in srgb, var(--pompui-chrome-accent) 48%, transparent);
     border-radius: 999px;
     font-size: 0.68rem;
     letter-spacing: 0.02em;
-    background: rgba(0, 0, 0, 0.15);
-    color: var(--pompui-chrome-muted);
+    background: color-mix(in srgb, var(--pompui-chrome-accent) 12%, transparent);
+    color: var(--pompui-chrome-text);
     transform: translateX(-50%);
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        opacity 0.2s ease;
     white-space: nowrap;
 }
 
-.pompui-chrome__ai-note:hover { opacity: 0.9; }
+.pompui-chrome__ai-note:hover,
+.pompui-chrome__ai-note:focus-visible {
+    border-color: var(--pompui-chrome-accent);
+    background: color-mix(in srgb, var(--pompui-chrome-accent) 22%, transparent);
+    opacity: 0.9;
+}
 
 .pompui-chrome__home {
     bottom: 0.6rem;

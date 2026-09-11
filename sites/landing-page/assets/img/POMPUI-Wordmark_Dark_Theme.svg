@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="2172" height="724" viewBox="0 0 2172 724"
+     data-accent="#00f044"
+     role="img" aria-labelledby="title desc">
+  <title id="title">POMPUI dark-theme wordmark with adaptive glow</title>
+  <desc id="desc">Geometric white POMPUI lettering on transparency with an isotropic OKLCH-adaptive edge glow and triangular i dot.</desc>
+
+  <style>
+    .pompui-theme-color { transition: fill 180ms ease; }
+  </style>
+
+  <defs>
+    <linearGradient id="face" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#fafafa"/>
+    </linearGradient>
+
+    <!-- Both kernels are isotropic: the same sigma is used on x and y. -->
+    <filter id="glowWide" x="0" y="0" width="2172" height="724"
+            filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+    <filter id="glowNear" x="0" y="0" width="2172" height="724"
+            filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+    <filter id="dotGlowWide" x="0" y="0" width="2172" height="724"
+            filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+    <filter id="dotGlowNear" x="0" y="0" width="2172" height="724"
+            filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+
+    <!-- A filled geometric dilation; the static white face above it reveals only the rim. -->
+    <filter id="outlineDilation" x="0" y="0" width="2172" height="724"
+            filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feMorphology in="SourceGraphic" operator="dilate" radius="3"/>
+    </filter>
+
+    <!-- Stacked, closed glyph faces. No masks or cutout composition. -->
+    <g id="letters" fill-rule="evenodd" stroke-linejoin="round" stroke-linecap="round">
+      <!-- P -->
+      <path d="M176 228H405C434 228 455 249 455 278V330C455 359 434 380 405 380H241V450H176V320H386C392 320 395 317 395 311V293C395 287 392 284 386 284H176Z"/>
+
+      <!-- O -->
+      <path d="M532 228H720C751 228 774 251 774 282V396C774 427 751 450 720 450H532C501 450 478 427 478 396V282C478 251 501 228 532 228ZM553 284C548 284 545 287 545 292V382C545 387 548 390 553 390H699C704 390 707 387 707 382V292C707 287 704 284 699 284Z"/>
+
+      <!-- M -->
+      <path d="M799 228H864L956 332L1048 228H1119V450H1052V315L956 426L860 315V450H799Z"/>
+
+      <!-- P -->
+      <path d="M1148 228H1377C1406 228 1427 249 1427 278V330C1427 359 1406 380 1377 380H1213V450H1148V320H1358C1364 320 1367 317 1367 311V293C1367 287 1364 284 1358 284H1148Z"/>
+
+      <!-- U -->
+      <path d="M1459 228H1525V350C1525 376 1540 390 1565 390H1651C1676 390 1691 376 1691 350V228H1757V354C1757 414 1721 450 1664 450H1552C1495 450 1459 414 1459 354Z"/>
+
+      <!-- Final i stem. Its upper diagonal is parallel to the dot's lower diagonal. -->
+      <path d="M1795 318L1868 254V450H1795Z"/>
+    </g>
+
+    <!-- The dot and stem diagonals share vector (-73,64), hence identical angle. -->
+    <path id="idot" d="M1795 228H1868L1795 292Z" stroke-linejoin="round"/>
+  </defs>
+
+  <!-- Far field: constant angular response, no directional light source. -->
+  <use id="letter-glow-wide" class="pompui-theme-color pompui-theme-glow"
+       data-glow-source="#00f044" data-color-property="fill"
+       xlink:href="#letters" fill="#00f044" stroke="none"
+       opacity="0.32" filter="url(#glowWide)"/>
+  <use id="letter-glow-near" class="pompui-theme-color pompui-theme-glow"
+       data-glow-source="#00f044" data-color-property="fill"
+       xlink:href="#letters" fill="#00f044" stroke="none"
+       opacity="0.72" filter="url(#glowNear)"/>
+
+  <!-- Adaptive filled dilation; never shares an element with the static face. -->
+  <use id="letter-outline" class="pompui-theme-color pompui-theme-outline"
+       data-glow-source="#00ed43" data-color-property="fill"
+       xlink:href="#letters" fill="#00ed43" stroke="none"
+       filter="url(#outlineDilation)"/>
+
+  <!-- Permanently white and intentionally carries no adaptive metadata. -->
+  <use id="letter-face-static" xlink:href="#letters"
+       fill="url(#face)" stroke="none"/>
+
+  <!-- Independently centred LED glow for the complete triangular i-dot. -->
+  <use id="idot-glow-wide" class="pompui-theme-color pompui-theme-idot-glow"
+       data-glow-source="#00f044" data-color-property="fill"
+       xlink:href="#idot" fill="#00f044" stroke="none"
+       opacity="0.45" filter="url(#dotGlowWide)"/>
+  <use id="idot-glow-near" class="pompui-theme-color pompui-theme-idot-glow"
+       data-glow-source="#00f044" data-color-property="fill"
+       xlink:href="#idot" fill="#00f044" stroke="none"
+       opacity="0.85" filter="url(#dotGlowNear)"/>
+  <use id="idot-outline" class="pompui-theme-color pompui-theme-idot"
+       data-glow-source="#00ed43" data-color-property="fill"
+       xlink:href="#idot" fill="#00ed43" stroke="none"
+       filter="url(#outlineDilation)"/>
+  <use id="idot-core" class="pompui-theme-color pompui-theme-idot"
+       data-glow-source="#00f044" data-color-property="fill"
+       xlink:href="#idot" fill="#00f044" stroke="none"/>
+
+  <script><![CDATA[
+    (() => {
+      const root = document.documentElement;
+      const q = (n, a, b) => Math.min(b, Math.max(a, n));
+
+      function parseColor(value) {
+        const v = String(value || '').trim().toLowerCase();
+        let m = v.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+        if (m) {
+          let h = m[1];
+          if (h.length === 3) h = h.replace(/(.)/g, '$1$1');
+          return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
+        }
+        m = v.match(/^rgb\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)\s*\)$/);
+        if (m) return [q(+m[1] / 255, 0, 1), q(+m[2] / 255, 0, 1), q(+m[3] / 255, 0, 1)];
+        return null;
+      }
+
+      const linear = c => c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+      const gamma = c => c <= 0.0031308 ? 12.92 * c : 1.055 * Math.pow(c, 1 / 2.4) - 0.055;
+
+      function rgbToOklch(rgb) {
+        const r = linear(rgb[0]), g = linear(rgb[1]), b = linear(rgb[2]);
+        const l = Math.cbrt(0.4122214708*r + 0.5363325363*g + 0.0514459929*b);
+        const m = Math.cbrt(0.2119034982*r + 0.6806995451*g + 0.1073969566*b);
+        const s = Math.cbrt(0.0883024619*r + 0.2817188376*g + 0.6299787005*b);
+        const L = 0.2104542553*l + 0.7936177850*m - 0.0040720468*s;
+        const a = 1.9779984951*l - 2.4285922050*m + 0.4505937099*s;
+        const bb = 0.0259040371*l + 0.7827717662*m - 0.8086757660*s;
+        const C = Math.hypot(a, bb);
+        const h = (Math.atan2(bb, a) * 180 / Math.PI + 360) % 360;
+        return { L, C, h };
+      }
+
+      function oklchToRgb(L, C, h) {
+        const a = C * Math.cos(h * Math.PI / 180);
+        const b = C * Math.sin(h * Math.PI / 180);
+        const lp = L + 0.3963377774*a + 0.2158037573*b;
+        const mp = L - 0.1055613458*a - 0.0638541728*b;
+        const sp = L - 0.0894841775*a - 1.2914855480*b;
+        const l = lp*lp*lp, m = mp*mp*mp, s = sp*sp*sp;
+        return [
+          gamma( 4.0767416621*l - 3.3077115913*m + 0.2309699292*s),
+          gamma(-1.2684380046*l + 2.6097574011*m - 0.3413193965*s),
+          gamma(-0.0041960863*l - 0.7034186147*m + 1.7076147010*s)
+        ];
+      }
+
+      function inGamut(rgb) { return rgb.every(c => c >= 0 && c <= 1); }
+
+      function gamutMappedHex(L, C, h) {
+        let lo = 0, hi = Math.max(0, C), rgb = oklchToRgb(L, hi, h);
+        if (!inGamut(rgb)) {
+          for (let i = 0; i < 24; i++) {
+            const mid = (lo + hi) / 2;
+            const test = oklchToRgb(L, mid, h);
+            if (inGamut(test)) { lo = mid; rgb = test; } else hi = mid;
+          }
+        }
+        return '#' + rgb.map(c => Math.round(q(c, 0, 1) * 255).toString(16).padStart(2, '0')).join('');
+      }
+
+      function recolorElement(el, attribute, sourceHex, theme, reference) {
+        const source = rgbToOklch(parseColor(sourceHex));
+        const scale = reference.C > 1e-7 ? theme.C / reference.C : 0;
+        const mapped = gamutMappedHex(source.L, source.C * scale, theme.h);
+        el.setAttribute(attribute, mapped);
+      }
+
+      function setAccent(value) {
+        const rgb = parseColor(value);
+        if (!rgb) return false;
+        const theme = rgbToOklch(rgb);
+        const reference = rgbToOklch(parseColor('#00f044'));
+        root.querySelectorAll('[data-glow-source]').forEach(el => {
+          const props = (el.dataset.colorProperty || '').split(/\s+/).filter(Boolean);
+          props.forEach(prop => recolorElement(el, prop, el.dataset.glowSource, theme, reference));
+          if (el.dataset.strokeSource) recolorElement(el, 'stroke', el.dataset.strokeSource, theme, reference);
+        });
+        root.dataset.accent = value;
+        return true;
+      }
+
+      root.setPompuiAccent = setAccent;
+      addEventListener('pompui-accent-change', event => setAccent(event.detail && event.detail.color));
+
+      const requested = new URLSearchParams(location.search).get('accent');
+      const cssAccent = getComputedStyle(root).getPropertyValue('--pompui-accent').trim();
+      setAccent(requested || cssAccent || root.dataset.accent || '#00f044');
+
+      let lastAccent = root.dataset.accent;
+      new MutationObserver(() => {
+        const cssValue = getComputedStyle(root).getPropertyValue('--pompui-accent').trim();
+        const next = cssValue || root.dataset.accent;
+        if (next && next !== lastAccent) {
+          lastAccent = next;
+          setAccent(next);
+        }
+      }).observe(root, { attributes: true, attributeFilter: ['data-accent', 'class', 'style'] });
+    })();
+  ]]></script>
+</svg>
