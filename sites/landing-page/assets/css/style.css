@@ -219,7 +219,7 @@ svg {
 .brand {
     display: inline-flex;
     align-items: center;
-    gap: clamp(0.65rem, 1.2vw, 0.9rem);
+    gap: clamp(0.325rem, 0.6vw, 0.45rem);
     text-decoration: none;
 }
 
@@ -247,6 +247,7 @@ svg {
     background: transparent;
     color-scheme: light;
     pointer-events: none;
+    transform: translateX(-4.05%);
 }
 
 .logo-stack {
