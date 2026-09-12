@@ -245,6 +245,7 @@ svg {
     height: 100%;
     border: 0;
     background: transparent;
+    color-scheme: light;
     pointer-events: none;
 }
 
