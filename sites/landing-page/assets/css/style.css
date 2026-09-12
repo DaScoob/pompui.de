@@ -235,7 +235,7 @@ svg {
 
 .brand__wordmark {
     display: block;
-    width: clamp(7rem, 15dvh, 9rem);
+    width: clamp(14rem, 30dvh, 18rem);
     aspect-ratio: 3 / 1;
 }
 
