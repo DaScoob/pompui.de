@@ -131,7 +131,7 @@ svg {
     display: grid;
     width: 100%;
     height: 100%;
-    grid-template-rows: minmax(5.5rem, 12dvh) minmax(0, 1fr) minmax(3rem, 8dvh);
+    grid-template-rows: minmax(9.6rem, 20dvh) minmax(0, 1fr) minmax(3rem, 8dvh);
 }
 
 .scene {
@@ -229,11 +229,23 @@ svg {
     aspect-ratio: 1;
 }
 
+.home-page .brand__mark {
+    width: clamp(9.6rem, 20dvh, 12rem);
+}
+
 .brand__wordmark {
-    font-family: var(--display);
-    font-size: clamp(0.9rem, 2dvh, 1.1rem);
-    font-weight: 850;
-    letter-spacing: 0.24em;
+    display: block;
+    width: clamp(7rem, 15dvh, 9rem);
+    aspect-ratio: 3 / 1;
+}
+
+.brand__wordmark-art {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    pointer-events: none;
 }
 
 .logo-stack {
@@ -352,20 +364,16 @@ svg {
     display: grid;
     width: 100%;
     min-height: 0;
-    grid-template-areas: "copy logo";
+    grid-template-areas: "copy preview";
     grid-template-columns: minmax(0, 1fr) minmax(16rem, 42vw);
     align-items: end;
     gap: clamp(0.5rem, 2vw, 2rem);
 }
 
-.hero-logo {
-    grid-area: logo;
-    width: min(42vw, 66dvh, 42rem);
-    max-width: 100%;
-    align-self: center;
-    justify-self: end;
-    filter: drop-shadow(0 0 1.8rem rgba(var(--accent-rgb), 0.22));
-    transition: filter 600ms var(--ease-out);
+.activity-preview-slot {
+    grid-area: preview;
+    width: 100%;
+    min-height: 100%;
 }
 
 .activity-details {
@@ -627,17 +635,17 @@ svg {
     aspect-ratio: 1;
     padding: 0;
     place-items: center;
-    border: 1px solid var(--line);
+    border: 1px solid rgba(var(--accent-rgb), 0.48);
     border-radius: 50%;
-    background: var(--control-bg);
-    color: var(--muted);
+    background: rgba(var(--accent-rgb), 0.12);
+    color: var(--text);
     cursor: pointer;
     transform: translateY(-50%);
     backdrop-filter: blur(1rem);
     transition:
-        color 180ms ease,
-        border-color 180ms ease,
-        background-color 180ms ease,
+        color 200ms ease,
+        border-color 200ms ease,
+        background-color 200ms ease,
         transform 180ms ease;
 }
 
@@ -656,7 +664,7 @@ svg {
 .carousel-control:hover,
 .carousel-control:focus-visible {
     border-color: var(--accent-ink);
-    background: rgba(var(--accent-rgb), 0.12);
+    background: rgba(var(--accent-rgb), 0.22);
     color: var(--text);
 }
 
@@ -949,11 +957,11 @@ svg {
     }
 
     .screen {
-        grid-template-rows: minmax(5.25rem, 12dvh) minmax(0, 1fr) minmax(3rem, 8dvh);
+        grid-template-rows: minmax(9.6rem, 20dvh) minmax(0, 1fr) minmax(3rem, 8dvh);
     }
 
-    .brand__mark {
-        width: 4.8rem;
+    .home-page .brand__mark {
+        width: 9.6rem;
     }
 
     .brand__wordmark {
@@ -973,19 +981,15 @@ svg {
     }
 
     .hero-panel {
-        grid-template-areas:
-            "logo"
-            "copy";
+        grid-template-areas: "copy";
         grid-template-columns: minmax(0, 1fr);
-        grid-template-rows: minmax(0, 1fr) auto;
+        grid-template-rows: minmax(0, 1fr);
         align-content: end;
         gap: 0;
     }
 
-    .hero-logo {
-        width: min(62vw, 25dvh, 16rem);
-        align-self: end;
-        justify-self: center;
+    .activity-preview-slot {
+        display: none;
     }
 
     .carousel-control {
@@ -1011,7 +1015,11 @@ svg {
 
 @media (max-height: 44rem) {
     .screen {
-        grid-template-rows: 4.25rem minmax(0, 1fr) 3rem;
+        grid-template-rows: minmax(6rem, 18dvh) minmax(0, 1fr) 3rem;
+    }
+
+    .home-page .brand__mark {
+        width: clamp(6rem, 18dvh, 9.6rem);
     }
 
     .activity-details__description {
@@ -1033,16 +1041,10 @@ svg {
 
 @media (max-width: 48rem) and (max-height: 44rem) {
     .hero-panel {
-        grid-template-areas: "copy logo";
-        grid-template-columns: minmax(0, 1fr) minmax(4.8rem, 24vw);
+        grid-template-areas: "copy";
+        grid-template-columns: minmax(0, 1fr);
         grid-template-rows: minmax(0, 1fr);
-        gap: 0.35rem;
-    }
-
-    .hero-logo {
-        width: min(24vw, 22dvh, 8rem);
-        align-self: center;
-        justify-self: end;
+        gap: 0;
     }
 }
 
@@ -1067,9 +1069,8 @@ svg {
         width: clamp(4.6rem, 17dvh, 6rem);
     }
 
-    .hero-logo {
-        width: min(22vw, 30dvh);
-        min-width: 6rem;
+    .home-page .brand__mark {
+        width: clamp(5.5rem, 18dvh, 7rem);
     }
 }
 
@@ -1086,8 +1087,7 @@ svg {
 
 @media (forced-colors: active) {
     .scene,
-    .activity-tile__shine,
-    .hero-logo {
+    .activity-tile__shine {
         display: none;
     }
 
@@ -1105,20 +1105,27 @@ svg {
     top: 0.6rem;
     left: 50%;
     padding: 0.25rem 0.6rem;
-    border: 1px solid currentColor;
+    border: 1px solid rgba(var(--accent-rgb), 0.48);
     border-radius: 999px;
-    background: rgba(0, 0, 0, 0.15);
-    color: inherit;
+    background: rgba(var(--accent-rgb), 0.12);
+    color: var(--text);
     font-size: 0.68rem;
     letter-spacing: 0.02em;
     opacity: 0.45;
     text-decoration: none;
     transform: translateX(-50%);
+    transition:
+        color 200ms ease,
+        border-color 200ms ease,
+        background-color 200ms ease,
+        opacity 200ms ease;
     white-space: nowrap;
 }
 
 .ai-note:hover,
 .ai-note:focus-visible {
+    border-color: var(--accent-ink);
+    background: rgba(var(--accent-rgb), 0.22);
     opacity: 0.85;
 }
 
@@ -1129,4 +1136,10 @@ svg {
 
 .skip-link:focus {
     top: 2.8rem;
+}
+
+@media (max-width: 26rem) {
+    .home-page .brand__wordmark {
+        display: none;
+    }
 }

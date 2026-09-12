@@ -80,7 +80,7 @@
         const targetStrength = clamp(targetChroma / 0.22, 0, 1.45);
 
         if (mode === "dark") {
-            svg.querySelectorAll(".pompui-glow").forEach((node) => {
+            svg.querySelectorAll(".pompui-glow, .pompui-theme-color").forEach((node) => {
                 const source = normalizeHex(node.dataset.glowSource);
                 if (!source) return;
                 const [lightness, chroma] = rgbToOklch(hexToRgb(source));
