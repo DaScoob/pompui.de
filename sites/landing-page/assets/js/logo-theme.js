@@ -102,11 +102,24 @@
         const svg = logoObject.contentDocument && logoObject.contentDocument.documentElement;
         if (!svg || svg.nodeName.toLowerCase() !== "svg") return;
         applyAccentToSvg(svg, logoObject.dataset.logoMode, activeAccent);
+
+        if (logoObject.hasAttribute("data-pompui-wordmark")) {
+            const foreground = normalizeHex(getComputedStyle(document.documentElement).getPropertyValue("--text"));
+            if (foreground) {
+                svg.querySelectorAll("#face stop").forEach((stop) => {
+                    stop.setAttribute("stop-color", foreground);
+                });
+            }
+        }
     };
 
     logoObjects.forEach((logoObject) => {
         logoObject.addEventListener("load", () => applyToObject(logoObject));
         applyToObject(logoObject);
+    });
+
+    window.addEventListener("pompui:color-mode-change", () => {
+        logoObjects.forEach(applyToObject);
     });
 
     window.PompuiLogo = {
