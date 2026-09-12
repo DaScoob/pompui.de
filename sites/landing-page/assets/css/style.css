@@ -130,7 +130,10 @@ svg {
     z-index: 2;
     display: grid;
     width: 100%;
+    max-width: 100vw;
+    min-width: 0;
     height: 100%;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: minmax(9.6rem, 20dvh) minmax(0, 1fr) minmax(3rem, 8dvh);
 }
 
@@ -206,6 +209,7 @@ svg {
 .bottombar,
 .console {
     width: 100%;
+    min-width: 0;
     padding-inline: var(--gutter);
 }
 

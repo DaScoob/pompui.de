@@ -22,7 +22,7 @@
         a.href = IMPRESSUM_URL;
         a.title = "Diese Seite wurde mit Unterstützung von KI erstellt";
         a.setAttribute("aria-label", "Hinweis: Diese Seite wurde mit Unterstützung von KI erstellt. Zur Datenschutzerklärung.");
-        a.textContent = "✳ Mit KI erstellt";
+        a.textContent = "* Mit KI erstellt";
         return a;
     }
 
