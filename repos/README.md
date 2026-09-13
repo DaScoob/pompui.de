@@ -14,7 +14,7 @@ around it.
 
 ```
 repos/
-  punctum/        # github.com/GitMinIT/punctum (timer/stopwatch/alarm/pomodoro)
+  punctum/        # github.com/GitMinIT/Punctum (timer/stopwatch/alarm/pomodoro, MIT)
   garden-journal/ # github.com/DaScoob/Garden-Journal (Mein Gemüsegarten, Next.js/vinext, port 3000)
 ```
 
