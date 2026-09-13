@@ -96,6 +96,6 @@ networks:
   pompui-network:
     driver: bridge
   web-network:
-    # Shared network created by the DHde project's global-proxy.
+    # Shared network created by the daniel-hettich.de project's global-proxy.
     name: daniel-hettichde_web-network
     external: true

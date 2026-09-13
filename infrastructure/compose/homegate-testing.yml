@@ -5,15 +5,15 @@
 # site containers are exposed directly — no global-proxy, no TLS.
 #
 # Port plan on this host (one direct HTTP port per project/site):
-#   daniel-hettich.de        -> 6009 (DHde repo)
+#   daniel-hettich.de        -> 6009 (daniel-hettich.de repo)
 #   pompui.de (landing)      -> 6010 (this repo)
 #   punctum.pompui.de        -> 6012 (this repo; 6011 is taken by open-webui)
 #   gj.pompui.de             -> 6013 (this repo)
 #   snapotter.pompui.de      -> excluded: needs secrets/snapotter-password and
 #                               is resource-heavy; not required for testing
 #
-# The external `web-network` (created by the DHde project) is not needed in
-# this workflow; joining it would fail when the DHde stack is not up.
+# The external `web-network` (created by the daniel-hettich.de project) is not
+# needed in this workflow; joining it would fail when that stack is not up.
 #
 # Usage (paths in override files resolve against the first compose file's dir):
 #   docker compose -f docker-compose.yml -f infrastructure/compose/homegate-testing.yml up -d --build

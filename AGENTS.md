@@ -4,7 +4,7 @@
 - **Project Root**: `/var/www/pompui.de`
 - **Testing Host**: `/home/daniel/Projects/pompui.de` (HomeGate home server — implement, test and debug only; nothing is published from here, HTTP-only workflow)
 - **Domain**: `pompui.de` (+ `www.pompui.de`)
-- **Architecture**: Dockerized. Static nginx containers; production traffic enters via the **shared global-proxy** (`global-proxy` container, owned by the DHde project) which terminates SSL on ports 80/443 and routes by `server_name`.
+- **Architecture**: Dockerized. Static nginx containers; production traffic enters via the **shared global-proxy** (`global-proxy` container, owned by the daniel-hettich.de project) which terminates SSL on ports 80/443 and routes by `server_name`.
 - See `ENVIRONMENT.md` for full server details.
 
 ## Testing Host (HomeGate)
@@ -13,8 +13,8 @@
   - `pompui.de` (landing) → **6010**
   - `punctum.pompui.de` → **6012** (6011 is taken by open-webui on this host)
 - `pompui-snapotter` is parked under the `not-on-testing-host` profile (needs `secrets/snapotter-password`, resource-heavy; not required here).
-- The external `web-network` join is overridden away — the DHde stack does not need to be running for testing this repo.
-- daniel-hettich.de testing runs directly on **6009** from the DHde repo (see its AGENTS.md).
+- The external `web-network` join is overridden away — the daniel-hettich.de stack does not need to be running for testing this repo.
+- daniel-hettich.de testing runs directly on **6009** from the daniel-hettich.de repo (see its AGENTS.md).
 - Verify: `curl http://192.168.178.60:6010/` (or `http://<LAN-IP>:<port>` from any device).
 
 ## Credentials & Secrets
@@ -29,7 +29,7 @@
 - Garden Journal lives in its own repo (`https://github.com/DaScoob/Garden-Journal.git`); Punctum in `https://github.com/GitMinIT/Punctum`; SnapOtter upstream is `https://github.com/snapotter-hq/SnapOtter` (AGPL — clone pinned at the running tag into `repos/snapotter`, image digest-pinned in compose).
 
 ## Infrastructure Map
-- **global-proxy** (external, from DHde compose): nginx:alpine, SSL termination, routes:
+- **global-proxy** (external, from the daniel-hettich.de compose): nginx:alpine, SSL termination, routes:
   - `pompui.de` / `www.pompui.de` → `pompui-landing:8080`
   - `punctum.pompui.de` → `pompui-punctum:8080`
   - `snapotter.pompui.de` → `pompui-snapotter:1349`
