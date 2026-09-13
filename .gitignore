@@ -13,13 +13,15 @@ __pycache__/
 *.py[codz]
 *.egg-info/
 .ipynb_checkpoints
-# garden-journal build artifacts (app removed from this repo)
-# Common app build artifacts inside repos/<app>/ clones
-repos/*/node_modules/
-repos/*/dist/
-repos/*/.next/
-repos/*/.wrangler/
-repos/punctum/
-repos/*/.git/
-repos/garden-journal/
-repos/snapotter/
+
+# App repos in repos/ are independent clones — the clone itself is ignored,
+# but hosting additions for vtracer (Dockerfile, nginx.conf, 404 page) are
+# tracked via exception rules below.
+repos/*/
+!repos/vtracer/
+!repos/vtracer/*
+repos/vtracer/webapp/target/
+repos/vtracer/webapp/app/pkg/
+repos/vtracer/webapp/app/node_modules/
+repos/vtracer/webapp/app/dist/
+repos/vtracer/webapp/pkg/
