@@ -135,6 +135,12 @@
                     </button>
                 </div>
 
+                <button class="activity-compass" type="button" data-wheel-home aria-label="Zur Aktivität Abonnements navigieren" title="Zu den Abonnements">
+                    <span class="activity-compass__dial" aria-hidden="true">
+                        <span class="activity-compass__needle"></span>
+                    </span>
+                </button>
+
                 <button class="carousel-control carousel-control--next" type="button" data-direction="1" aria-label="Nächste Aktivität">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
                 </button>
@@ -159,5 +165,25 @@
     </div>
 
     <div class="selection-flash" data-selection-flash aria-hidden="true"></div>
+
+    <dialog class="subscription-dialog" data-subscription-dialog aria-labelledby="subscription-title" aria-describedby="subscription-description">
+        <div class="subscription-dialog__panel">
+            <header class="subscription-dialog__header">
+                <div>
+                    <p class="subscription-dialog__eyebrow">Persönliche Auswahl</p>
+                    <h2 id="subscription-title">Aktivitäten abonnieren</h2>
+                    <p id="subscription-description">Einzelne Aktivitäten oder vollständige Kategorien auswählen.</p>
+                </div>
+                <span class="subscription-dialog__count" data-subscription-count aria-live="polite"></span>
+            </header>
+
+            <div class="subscription-dialog__content" data-subscription-content></div>
+
+            <footer class="subscription-dialog__footer">
+                <p>Die Auswahl wird nur in diesem Browser gespeichert.</p>
+                <button class="subscription-dialog__confirm" type="button" data-subscription-confirm>OK</button>
+            </footer>
+        </div>
+    </dialog>
 </body>
 </html>

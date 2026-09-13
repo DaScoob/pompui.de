@@ -1,5 +1,12 @@
 # Agent Guide for pompui.de
 
+## Development status — activity subscription wheel
+
+> [!WARNING]
+> The activity subscription wheel implementation on this feature branch is **not production-ready** and must not be merged into or deployed from `main` yet.
+
+Blocking known issue: the tile of the currently active activity can disappear while the wheel is being rendered or moved. The implementation may only be treated as production-ready after this defect has been fixed and the active tile has been verified as continuously visible on desktop and mobile.
+
 ## Environment
 - **Project Root**: `/var/www/pompui.de`
 - **Testing Host**: `/home/daniel/Projects/pompui.de` (HomeGate home server — implement, test and debug only; nothing is published from here, HTTP-only workflow)
