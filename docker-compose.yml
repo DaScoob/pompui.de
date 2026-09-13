@@ -41,6 +41,21 @@ services:
       - web-network
     restart: always
 
+  pompui-vtracer:
+    # VTracer (raster->vector) lives upstream (visioncortex/vtracer), cloned
+    # into repos/vtracer; hosting files (Dockerfile, nginx.conf, 404 page)
+    # are tracked in this repo (see repos/README.md).
+    build: ./repos/vtracer
+    container_name: pompui-vtracer
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - pompui-network
+      - web-network
+    restart: always
+
   pompui-snapotter:
     # SnapOtter lives in its own repository, cloned into repos/snapotter
     # (see repos/README.md). AGPL-3.0: we run the **digest-pinned upstream
