@@ -1,6 +1,17 @@
 (function () {
     "use strict";
 
+    // Activity links: on production (pompui.de domains) use the public
+    // subdomains; on any other host (e.g. the HomeGate testing server with
+    // direct ports) point at the local host so the carousel works offline.
+    const isProduction = /(^|\.)pompui\.de$/.test(window.location.hostname);
+    const port = (p) => (isProduction ? "" : ":" + p);
+    const appUrl = {
+        garden: `http${isProduction ? "s" : ""}://${isProduction ? "gj.pompui.de" : window.location.hostname + port(6013)}/`,
+        snapotter: `http${isProduction ? "s" : ""}://${isProduction ? "snapotter.pompui.de" : window.location.hostname + port(6014)}/`,
+        punctum: `http${isProduction ? "s" : ""}://${isProduction ? "punctum.pompui.de" : window.location.hostname + port(6012)}/`
+    };
+
     const activities = [
         {
             id: "garden",
@@ -10,7 +21,7 @@
             meta: "Planen · Pflegen · Ernten",
             accent: "#9bea75",
             accentRgb: "155, 234, 117",
-            href: "https://gj.pompui.de/",
+            href: appUrl.garden,
             action: "Aktivität starten"
         },
         {
@@ -21,7 +32,7 @@
             meta: "Konvertieren · Komprimieren · KI · AGPL-3.0",
             accent: "#e07832",
             accentRgb: "224, 120, 50",
-            href: "https://snapotter.pompui.de/",
+            href: appUrl.snapotter,
             action: "Aktivität starten"
         },
         {
@@ -32,7 +43,7 @@
             meta: "Messen · Erinnern · Fokussieren",
             accent: "#b28cff",
             accentRgb: "178, 140, 255",
-            href: "https://punctum.pompui.de/",
+            href: appUrl.punctum,
             action: "Aktivität starten"
         }
     ];
