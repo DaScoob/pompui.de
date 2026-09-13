@@ -203,9 +203,9 @@
 
             tile.style.setProperty("--offset", String(offset));
             tile.style.setProperty("--tile-shift", `${(offset * step).toFixed(2)}px`);
-            tile.style.setProperty("--tile-opacity", String(Math.max(0.46, 1 - distance * 0.2)));
-            tile.style.setProperty("--tile-scale", String(1 - distance * 0.12));
-            tile.style.setProperty("--tile-blur", distance > 1 ? "1px" : "0px");
+            tile.style.setProperty("--tile-opacity", String(Math.max(0.6, 1 - distance * 0.13)));
+            tile.style.setProperty("--tile-scale", String(1 - distance * 0.1));
+            tile.style.setProperty("--tile-blur", "0px");
             // Dye each tile with its activity accent so icon and glow match
             tile.style.setProperty("--tile-accent", activities[index].accent);
             tile.classList.toggle("is-active", isActive);
@@ -232,7 +232,7 @@
             meta.textContent = activity.meta;
             renderAction(activity);
             details.classList.remove("is-changing");
-        }, 150);
+        }, 40);
     };
 
     const pulseScene = () => {

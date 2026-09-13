@@ -390,8 +390,8 @@ svg {
     opacity: 1;
     transform: translateY(0);
     transition:
-        opacity 220ms ease,
-        transform 420ms var(--ease-out);
+        opacity 160ms ease,
+        transform 280ms var(--ease-out);
 }
 
 .activity-details.is-changing {
@@ -566,9 +566,9 @@ svg {
         translate3d(calc(-50% + var(--tile-shift, 0px)), -50%, 0)
         scale(var(--tile-scale, 1));
     transition:
-        transform 660ms var(--ease-spring),
-        opacity 420ms ease,
-        filter 420ms ease;
+        transform 420ms var(--ease-spring),
+        opacity 260ms ease,
+        filter 260ms ease;
     filter: blur(var(--tile-blur, 0px));
     will-change: transform, opacity;
 }
@@ -616,8 +616,8 @@ svg {
     stroke-width: 1.45;
     filter: drop-shadow(0 0 1rem color-mix(in srgb, var(--tile-accent) 44%, transparent));
     transition:
-        color 500ms ease,
-        transform 560ms var(--ease-spring);
+        color 260ms ease,
+        transform 380ms var(--ease-spring);
 }
 
 .activity-tile__label {
