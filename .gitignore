@@ -20,3 +20,4 @@ repos/*/dist/
 repos/*/.next/
 repos/*/.wrangler/
 repos/punctum/
+repos/*/.git/

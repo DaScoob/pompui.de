@@ -3,6 +3,17 @@
 
     const activities = [
         {
+            id: "garden",
+            title: "Gartenjournal",
+            status: "Bereit",
+            description: "Beete gestalten, Kulturen verwalten und das Gartenjahr im Blick behalten.",
+            meta: "Planen · Pflegen · Ernten",
+            accent: "#9bea75",
+            accentRgb: "155, 234, 117",
+            href: "https://gj.pompui.de/",
+            action: "Aktivität starten"
+        },
+        {
             id: "snapotter",
             title: "SnapOtter",
             status: "Bereit",

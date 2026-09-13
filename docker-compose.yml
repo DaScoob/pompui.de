@@ -27,6 +27,20 @@ services:
       - web-network
     restart: always
 
+  pompui-garden-journal:
+    # Garden Journal lives in its own repository, cloned into
+    # repos/garden-journal (see repos/README.md).
+    build: ./repos/garden-journal
+    container_name: pompui-garden-journal
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - pompui-network
+      - web-network
+    restart: always
+
   pompui-snapotter:
     # Digest pinned for supply-chain safety (AGPL licence compliance, see
     # sites/snapotter/LICENSE-COMPLIANCE.md). Update together with the source offer.
