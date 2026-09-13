@@ -22,7 +22,9 @@ export default function ImpressumPage() {
       <section>
         <h2>Anbieter</h2>
         <address>
-          <strong>Daniel Hettich</strong>
+          <strong>Pompui</strong>
+          <br />
+          Vertreten durch: Daniel Hettich (Geschäftsführer)
           <br />
           c/o Impressumservice Dein-Impressum, Stettiner Str. 41
           <br />
@@ -41,7 +43,15 @@ export default function ImpressumPage() {
 
       <section>
         <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
-        <p>Daniel Hettich, Anschrift wie oben.</p>
+        <p>
+          Daniel Hettich
+          <br />
+          c/o Impressumservice Dein-Impressum, Stettiner Str. 41
+          <br />
+          35410 Hungen
+          <br />
+          Deutschland
+        </p>
       </section>
 
       <section>
@@ -57,7 +67,7 @@ export default function ImpressumPage() {
 
       <section>
         <h2>Verbraucherstreitbeilegung / Universalschlichtungsstelle</h2>
-        <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+        <p>Wir sind weder bereit noch verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
       </section>
 
       <section>
@@ -110,7 +120,7 @@ export default function ImpressumPage() {
           <br />
           Elgendorfer Str. 57
           <br />
-          66482 Zweibrücken
+          56410 Montabaur
         </p>
       </section>
     </main>
