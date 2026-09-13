@@ -21,7 +21,7 @@ Server and infrastructure documentation for the **pompui.de** project. This proj
 - Currently running containers (from DHde project, observed via process list):
   - `global-proxy` — nginx:alpine, publishes host ports **80** and **443** (single entry point for all sites).
   - `landing-page` — static nginx site for daniel-hettich.de.
-  - `garden-journal` — Node 22 app (Next.js/vinext) on port 3000 for gj.daniel-hettich.de.
+  - `garden-journal` — Node 22 app (Next.js/vinext) on port 3000 for gj.pompui.de.
 
 ## Architecture
 
@@ -30,7 +30,7 @@ Global reverse-proxy pattern (same as DHde):
 ```
 Internet ──> :80/:443 global-proxy (nginx, SSL termination)
                  ├── pompui.de / www.pompui.de ──> pompui-landing:80
-                 └── (DHde routes: daniel-hettich.de, gj.daniel-hettich.de)
+                 └── (DHde route: daniel-hettich.de)
 ```
 
 - `global-proxy` reads its server blocks from the **DHde** project's `infrastructure/nginx/conf.d/` volume mount (`/var/www/daniel-hettich.de/infrastructure/nginx/conf.d` → `/etc/nginx/conf.d:ro`).
