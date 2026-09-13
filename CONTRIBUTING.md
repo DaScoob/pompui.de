@@ -1,6 +1,6 @@
 # Contributing to pompui.de
 
-Welcome! This repo hosts the sources for **pompui.de** (landing page + garden journal), deployed as Docker containers on a shared server. Multiple people work on this project, so please follow the guidelines below.
+Welcome! This repo hosts the sources for **pompui.de** (landing page + hosted apps), deployed as Docker containers on a shared server. Multiple people work on this project, so please follow the guidelines below.
 
 > **Note:** These guidelines are a living document — they are not set in stone. Propose changes via PR if something doesn't work for you or is missing.
 
@@ -35,19 +35,17 @@ Since several people contribute, please follow this flow:
 
 ```bash
 docker compose up -d --build   # build & start containers
-# garden journal tests:
-docker run --rm -v $PWD/sites/garden-journal:/app -w /app node:22-alpine npm test
 ```
 
-- Run tests before committing (`npm test` for garden-journal — they must pass).
 - Check your changes through the local containers, not only in the file system.
 - Do not commit `node_modules/` (it is git-ignored).
+- Apps in `repos/` are separate repositories with their own test suites — run them inside the app repo (see `repos/README.md`).
 
 ## Server / infrastructure rules (important!)
 
 These exist because this host runs **multiple projects** (see `ENVIRONMENT.md`):
 
-- **Container names** must be globally unique on the host — prefix with `pompui-` (e.g. `pompui-landing`, `pompui-garden-journal`).
+- **Container names** must be globally unique on the host — prefix with `pompui-` (e.g. `pompui-landing`, `pompui-punctum`).
 - **Ports**: only the shared `global-proxy` may bind host ports 80/443. Never publish additional ports from your service containers.
 - **Routing**: server blocks live in `infrastructure/nginx/conf.d/`. They must be mirrored to the proxy's mount directory on the server (`/var/www/daniel-hettich.de/infrastructure/nginx/conf.d/`) after every change — see `AGENTS.md → Deployment`.
 - **Secrets**: never commit tokens, keys or `.env` files. `secrets/` and `.env` are git-ignored; keep it that way.
@@ -71,13 +69,12 @@ This project discloses that its content, design, images and source code were cre
 ```
 
 Static pages additionally need the badge CSS (already present in `sites/landing-page/assets/css/style.css`):
-
 ```css
 .ai-note { position: fixed; z-index: 200; top: 0.6rem; left: 0.6rem; padding: 0.25rem 0.6rem; border: 1px solid currentColor; border-radius: 999px; font-size: 0.68rem; letter-spacing: 0.02em; opacity: 0.45; background: rgba(0, 0, 0, 0.15); color: inherit; text-decoration: none; }
 .ai-note:hover { opacity: 0.85; }
 ```
 
-In the garden journal (Next.js/vinext) the badge is already global via `app/layout.js` (`<AiNote />` from `app/components/ai-note.js`) — new routes there don't need to add it manually.
+In apps with their own repo (see `repos/README.md`), the badge setup lives in that repo's layout — check its README.
 
 **Impressum "KI-Hinweis" section** (required text):
 
@@ -90,7 +87,7 @@ Daniel Hettich kuratiert.</p>
 
 Checklist for new pages/PRs:
 - [ ] AI badge present and linking to the impressum
-- [ ] Badge CSS included (static pages) or layout includes `<AiNote />` (garden journal)
+- [ ] Badge CSS included (static pages) or layout includes the badge (app repos)
 - [ ] If it's an impressum: "KI-Hinweis" section included
 
 A PR that adds a page without the badge will be asked to fix it before merge.

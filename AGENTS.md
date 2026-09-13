@@ -12,7 +12,6 @@
 - Containers are exposed **directly** (HTTP, no proxy, no TLS), one port per site:
   - `pompui.de` (landing) → **6010**
   - `punctum.pompui.de` → **6012** (6011 is taken by open-webui on this host)
-  - `gj.pompui.de` → **6013**
 - `pompui-snapotter` is parked under the `not-on-testing-host` profile (needs `secrets/snapotter-password`, resource-heavy; not required here).
 - The external `web-network` join is overridden away — the DHde stack does not need to be running for testing this repo.
 - daniel-hettich.de testing runs directly on **6009** from the DHde repo (see its AGENTS.md).
@@ -23,13 +22,19 @@
 - **GitHub Token**: store in `secrets/github.token` (git-ignored) or let git use a credential helper; never commit it.
 - **SSL Certificates**: `/etc/letsencrypt` on host → `/etc/nginx/ssl` inside `global-proxy`. Current cert only covers `*.daniel-hettich.de` — a pompui.de cert is still needed.
 
+## Repo Layout
+- `sites/landing-page` — the landing page (this repo's core product).
+- `sites/snapotter` — licence-compliance docs for the third-party SnapOtter image (code lives upstream).
+- `repos/` — **hosted apps as separate git repositories**, cloned into this tree; each is built and routed like any other container. See `repos/README.md` for the full how-to (add an app: clone repo, compose service, carousel entry, subdomain, proxy conf).
+- Garden Journal lives in its own repo (`https://github.com/DaScoob/Garden-Journal.git`) and is no longer part of this stack.
+
 ## Infrastructure Map
 - **global-proxy** (external, from DHde compose): nginx:alpine, SSL termination, routes:
   - `pompui.de` / `www.pompui.de` → `pompui-landing:8080`
-  - `gj.pompui.de` → `pompui-garden-journal:3000`
+  - `punctum.pompui.de` → `pompui-punctum:8080`
   - `snapotter.pompui.de` → `pompui-snapotter:1349`
 - **pompui-landing**: static landing page (nginx-unprivileged:alpine, non-root, port 8080).
-- **pompui-garden-journal**: Garden Journal app ("Mein Gartenjournal", Next.js/vinext on Node 22, port 3000).
+- **pompui-punctum**: Punctum app (separate repo in `repos/punctum`, static nginx, port 8080).
 - **pompui-snapotter**: SnapOtter 2.2.0 file-processing suite (AGPL-3.0, embedded PostgreSQL/Redis, port 1349). **Licence compliance is mandatory** — see `sites/snapotter/LICENSE-COMPLIANCE.md` before updating it: pin image digest, update source offer. Auth enabled, telemetry off, password in `secrets/snapotter-password`.
 
 ## Deployment
@@ -42,8 +47,4 @@
 5. ⚠️ Gotcha: the proxy-wide `X-Frame-Options: DENY` also applies to **non-HTML responses**. Anything a page embeds as `<object>`/`<iframe>` (e.g. `<object data="*.svg">`) is a nested navigation and gets blocked by Chrome with `net::ERR_BLOCKED_BY_RESPONSE` — the element renders empty with no obvious error on the page. The pompui-landing conf therefore carries a `location ~* \.svg$` block that re-declares the headers without XFO (nginx `add_header` does not inherit into nested locations) and adds CSP `frame-ancestors 'self'` instead. If you embed other subresources as documents (PDFs, XML…), extend that pattern to their extensions.
 
 ## Scaling & Extensibility
-- To add a new site:
-  1. Create a new directory under `sites/`.
-  2. Add a service definition to `docker-compose.yml` (container name must be globally unique on the host, prefix with `pompui-`).
-  3. Add a new `.conf` file in `infrastructure/nginx/conf.d/` and copy it to the DHde proxy mount.
-  4. Reload the proxy (see step 3 above).
+- To add a new hosted app, follow `repos/README.md` (clone repo → compose service → carousel entry → nginx conf → proxy mount).
