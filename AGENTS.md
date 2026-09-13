@@ -24,9 +24,9 @@
 
 ## Repo Layout
 - `sites/landing-page` — the landing page (this repo's core product).
-- `sites/snapotter` — licence-compliance docs for the third-party SnapOtter image (code lives upstream).
+- `sites/landing-page/html/sites/snapotter/` — served AGPL licence-compliance docs for SnapOtter (image lives upstream).
 - `repos/` — **hosted apps as separate git repositories**, cloned into this tree; each is built and routed like any other container. See `repos/README.md` for the full how-to (add an app: clone repo, compose service, carousel entry, subdomain, proxy conf).
-- Garden Journal lives in its own repo (`https://github.com/DaScoob/Garden-Journal.git`) and is no longer part of this stack.
+- Garden Journal lives in its own repo (`https://github.com/DaScoob/Garden-Journal.git`); Punctum in `https://github.com/GitMinIT/Punctum`; SnapOtter upstream is `https://github.com/snapotter-hq/SnapOtter` (AGPL — clone pinned at the running tag into `repos/snapotter`, image digest-pinned in compose).
 
 ## Infrastructure Map
 - **global-proxy** (external, from DHde compose): nginx:alpine, SSL termination, routes:
@@ -35,7 +35,7 @@
   - `snapotter.pompui.de` → `pompui-snapotter:1349`
 - **pompui-landing**: static landing page (nginx-unprivileged:alpine, non-root, port 8080).
 - **pompui-punctum**: Punctum app (separate repo in `repos/punctum`, static nginx, port 8080).
-- **pompui-snapotter**: SnapOtter 2.2.0 file-processing suite (AGPL-3.0, embedded PostgreSQL/Redis, port 1349). **Licence compliance is mandatory** — see `sites/snapotter/LICENSE-COMPLIANCE.md` before updating it: pin image digest, update source offer. Auth enabled, telemetry off, password in `secrets/snapotter-password`.
+- **pompui-snapotter**: SnapOtter 2.2.0 file-processing suite (AGPL-3.0, embedded PostgreSQL/Redis, port 1349). **Licence compliance is mandatory** — see `sites/landing-page/html/sites/snapotter/COMPLIANCE.md` before updating it: pin image digest, update source offer, keep `repos/snapotter` checkout at the running tag. Auth enabled, telemetry off, password in `secrets/snapotter-password`.
 
 ## Deployment
 1. `docker compose up -d --build` in this directory (builds `pompui-landing`, joins external `web-network`).

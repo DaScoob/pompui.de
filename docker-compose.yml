@@ -42,8 +42,11 @@ services:
     restart: always
 
   pompui-snapotter:
-    # Digest pinned for supply-chain safety (AGPL licence compliance, see
-    # sites/snapotter/LICENSE-COMPLIANCE.md). Update together with the source offer.
+    # SnapOtter lives in its own repository, cloned into repos/snapotter
+    # (see repos/README.md). AGPL-3.0: we run the **digest-pinned upstream
+    # image** unmodified; the clone in repos/ is for source inspection
+    # (Corresponding Source) and licence docs, NOT for building.
+    # Update together with sites/landing-page/html/sites/snapotter/COMPLIANCE.md.
     image: snapotter/snapotter:latest@sha256:2e11b4fa9138fa93e0fdfde5da3a2d042eebcfa81dd51286488872a3eb8086c8
     container_name: pompui-snapotter
     # Embedded mode (in-container Postgres 17 + Redis 8): no DATABASE_URL/REDIS_URL

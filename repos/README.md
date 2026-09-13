@@ -1,10 +1,10 @@
 # repos/ — Hosted Apps
 
 This folder holds the **separate git repositories of every app hosted on
-pompui.de** (currently: `punctum`, `garden-journal`). Each app gets its own
-GitHub repository and is cloned into this tree; the pompui.de repo only
-provides the infrastructure (compose service, nginx routing, carousel entry)
-around it.
+pompui.de** (currently: `punctum`, `garden-journal`, `snapotter`). Each app
+gets its own GitHub repository and is cloned into this tree; the pompui.de
+repo only provides the infrastructure (compose service, nginx routing,
+carousel entry) around it.
 
 > The app code is **not** part of this repo — it lives in its own repository.
 > The clone is git-ignored (`.git/` and build artifacts), so a fresh clone of
@@ -16,7 +16,23 @@ around it.
 repos/
   punctum/        # github.com/GitMinIT/Punctum (timer/stopwatch/alarm/pomodoro, MIT)
   garden-journal/ # github.com/DaScoob/Garden-Journal (Mein Gemüsegarten, Next.js/vinext, port 3000)
+  snapotter/      # github.com/snapotter-hq/SnapOtter @v2.2.0 (file processing, AGPL-3.0, port 1349)
 ```
+
+**Special case — snapotter (AGPL-3.0):** the compose service does **not**
+build from the clone; it pulls the digest-pinned upstream image
+(`snapotter/snapotter@sha256:…`). The clone exists for AGPL Corresponding
+Source availability and licence inspection only — see
+`sites/landing-page/html/sites/snapotter/COMPLIANCE.md` (served from the
+impressum). Clone it at the exact tag of the running version:
+
+```bash
+cd repos/
+git clone --branch v2.2.0 https://github.com/snapotter-hq/SnapOtter.git snapotter
+```
+
+Do not modify anything inside the clone (unmodified-run guarantee), and keep
+it in sync with the digest in `docker-compose.yml` on every update.
 
 ## Adding a new app — step by step
 

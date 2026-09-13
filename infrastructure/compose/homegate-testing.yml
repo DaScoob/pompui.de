@@ -38,5 +38,8 @@ services:
       - pompui-network
 
   pompui-snapotter:
+    # Excluded from the testing host: the AGPL image is 12+ GB, needs
+    # secrets/snapotter-password and is resource-heavy; not required for
+    # testing this repo.
     profiles:
       - not-on-testing-host
