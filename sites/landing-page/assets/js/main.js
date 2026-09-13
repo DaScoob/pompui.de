@@ -9,7 +9,8 @@
     const appUrl = {
         garden: `http${isProduction ? "s" : ""}://${isProduction ? "gj.pompui.de" : window.location.hostname + port(6013)}/`,
         snapotter: `http${isProduction ? "s" : ""}://${isProduction ? "snapotter.pompui.de" : window.location.hostname + port(6014)}/`,
-        punctum: `http${isProduction ? "s" : ""}://${isProduction ? "punctum.pompui.de" : window.location.hostname + port(6012)}/`
+        punctum: `http${isProduction ? "s" : ""}://${isProduction ? "punctum.pompui.de" : window.location.hostname + port(6012)}/`,
+        vtracer: `http${isProduction ? "s" : ""}://${isProduction ? "vtracer.pompui.de" : window.location.hostname + port(6015)}/`
     };
 
     const activities = [
@@ -47,6 +48,18 @@
             accentRgb: "178, 140, 255",
             href: appUrl.punctum,
             repo: "https://github.com/GitMinIT/Punctum",
+            action: "Aktivität starten"
+        },
+        {
+            id: "vtracer",
+            title: "VTracer",
+            status: "Bereit",
+            description: "Raster in Vektor: PNG/JPG in saubere SVG-Grafiken umwandeln — direkt im Browser.",
+            meta: "Umwandeln · Vektorisieren · Lokal",
+            accent: "#3ec6b8",
+            accentRgb: "62, 198, 184",
+            href: appUrl.vtracer,
+            repo: "https://github.com/visioncortex/vtracer",
             action: "Aktivität starten"
         }
     ];
