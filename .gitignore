@@ -19,3 +19,4 @@ repos/*/node_modules/
 repos/*/dist/
 repos/*/.next/
 repos/*/.wrangler/
+repos/punctum/
