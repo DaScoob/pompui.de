@@ -9,8 +9,10 @@
 #   pompui.de (landing)      -> 6010 (this repo)
 #   punctum.pompui.de        -> 6012 (this repo; 6011 is taken by open-webui)
 #   gj.pompui.de             -> 6013 (this repo)
-#   snapotter.pompui.de      -> excluded: needs secrets/snapotter-password and
-#                               is resource-heavy; not required for testing
+#   snapotter.pompui.de      -> 6014 (this repo; first boot pulls/loads the
+#                               12+ GB AGPL image and runs embedded
+#                               PostgreSQL+Redis — takes a while to become
+#                               healthy; needs secrets/snapotter-password)
 #
 # The external `web-network` (created by the daniel-hettich.de project) is not
 # needed in this workflow; joining it would fail when that stack is not up.
@@ -38,8 +40,7 @@ services:
       - pompui-network
 
   pompui-snapotter:
-    # Excluded from the testing host: the AGPL image is 12+ GB, needs
-    # secrets/snapotter-password and is resource-heavy; not required for
-    # testing this repo.
-    profiles:
-      - not-on-testing-host
+    ports: !override
+      - "6014:1349"
+    networks: !override
+      - pompui-network

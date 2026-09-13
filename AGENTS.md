@@ -12,7 +12,8 @@
 - Containers are exposed **directly** (HTTP, no proxy, no TLS), one port per site:
   - `pompui.de` (landing) → **6010**
   - `punctum.pompui.de` → **6012** (6011 is taken by open-webui on this host)
-- `pompui-snapotter` is parked under the `not-on-testing-host` profile (needs `secrets/snapotter-password`, resource-heavy; not required here).
+  - `gj.pompui.de` → **6013**
+  - `snapotter.pompui.de` → **6014** (embedded PostgreSQL/Redis; first boot takes a while; needs `secrets/snapotter-password`)
 - The external `web-network` join is overridden away — the daniel-hettich.de stack does not need to be running for testing this repo.
 - daniel-hettich.de testing runs directly on **6009** from the daniel-hettich.de repo (see its AGENTS.md).
 - Verify: `curl http://192.168.178.60:6010/` (or `http://<LAN-IP>:<port>` from any device).
