@@ -39,6 +39,7 @@
    - ⚠️ Gotcha: `nginx -s reload` alone does NOT re-resolve upstream container names — recreated containers get new IPs and the proxy keeps connecting to stale ones (502s with `Connection refused` to wrong IPs). A full restart re-resolves.
    - `nginx -s reload` is fine after conf *text* changes when no container was recreated.
 4. Ensure a valid pompui.de certificate exists in `/etc/letsencrypt` and fix the cert paths in the conf file.
+5. ⚠️ Gotcha: the proxy-wide `X-Frame-Options: DENY` also applies to **non-HTML responses**. Anything a page embeds as `<object>`/`<iframe>` (e.g. `<object data="*.svg">`) is a nested navigation and gets blocked by Chrome with `net::ERR_BLOCKED_BY_RESPONSE` — the element renders empty with no obvious error on the page. The pompui-landing conf therefore carries a `location ~* \.svg$` block that re-declares the headers without XFO (nginx `add_header` does not inherit into nested locations) and adds CSP `frame-ancestors 'self'` instead. If you embed other subresources as documents (PDFs, XML…), extend that pattern to their extensions.
 
 ## Scaling & Extensibility
 - To add a new site:
