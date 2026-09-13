@@ -111,12 +111,21 @@
 
     // Live clock in the topbar
     if (clockTime) {
+        let clockTimer;
         const renderClock = () => {
             const now = new Date();
             clockTime.textContent = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+            window.clearTimeout(clockTimer);
+            if (!document.hidden) {
+                clockTimer = window.setTimeout(renderClock, 60020 - (Date.now() % 60000));
+            }
         };
+
+        document.addEventListener("visibilitychange", () => {
+            window.clearTimeout(clockTimer);
+            if (!document.hidden) renderClock();
+        });
         renderClock();
-        setInterval(renderClock, 1000);
     }
 
     if (!carousel || tiles.length !== activities.length) {
@@ -379,19 +388,19 @@
         resizeTimer = window.setTimeout(() => updateTiles(false), 100);
     }, { passive: true });
 
-    window.addEventListener("pointermove", (event) => {
-        if (event.pointerType === "touch" || sceneFrame) {
-            return;
-        }
+    if (window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) {
+        window.addEventListener("pointermove", (event) => {
+            if (sceneFrame) return;
 
-        sceneFrame = window.requestAnimationFrame(() => {
-            const x = ((event.clientX / window.innerWidth) - 0.5) * 22;
-            const y = ((event.clientY / window.innerHeight) - 0.5) * 16;
-            root.style.setProperty("--scene-x", `${x.toFixed(2)}px`);
-            root.style.setProperty("--scene-y", `${y.toFixed(2)}px`);
-            sceneFrame = 0;
-        });
-    }, { passive: true });
+            sceneFrame = window.requestAnimationFrame(() => {
+                const x = ((event.clientX / window.innerWidth) - 0.5) * 22;
+                const y = ((event.clientY / window.innerHeight) - 0.5) * 16;
+                root.style.setProperty("--scene-x", `${x.toFixed(2)}px`);
+                root.style.setProperty("--scene-y", `${y.toFixed(2)}px`);
+                sceneFrame = 0;
+            });
+        }, { passive: true });
+    }
 
     // Sync the whole UI to the restored (or default) selection
     selectActivity(activeIndex, { focus: false });

@@ -2,6 +2,7 @@
     "use strict";
 
     const logoObjects = Array.from(document.querySelectorAll("[data-pompui-logo]"));
+    const brandLogo = document.querySelector("[data-pompui-brand-logo]");
     const clamp = (value, minimum, maximum) => Math.min(maximum, Math.max(minimum, value));
     let activeAccent = "#9BEA75";
 
@@ -113,13 +114,37 @@
         }
     };
 
+    const syncBrandSource = (mode) => {
+        if (!brandLogo) return false;
+
+        const normalizedMode = mode === "light" ? "light" : "dark";
+        const source = normalizedMode === "light" ? brandLogo.dataset.logoLightSrc : brandLogo.dataset.logoDarkSrc;
+        if (!source || brandLogo.getAttribute("data") === source) return false;
+
+        brandLogo.dataset.logoMode = normalizedMode;
+        brandLogo.classList.add("is-loading");
+        brandLogo.setAttribute("data", source);
+        return true;
+    };
+
     logoObjects.forEach((logoObject) => {
-        logoObject.addEventListener("load", () => applyToObject(logoObject));
+        logoObject.addEventListener("load", () => {
+            applyToObject(logoObject);
+            logoObject.classList.remove("is-loading");
+        });
+    });
+
+    syncBrandSource(document.documentElement.dataset.colorMode);
+
+    logoObjects.forEach((logoObject) => {
         applyToObject(logoObject);
     });
 
     window.addEventListener("pompui:color-mode-change", () => {
-        logoObjects.forEach(applyToObject);
+        const sourceChanged = syncBrandSource(document.documentElement.dataset.colorMode);
+        logoObjects.forEach((logoObject) => {
+            if (!sourceChanged || logoObject !== brandLogo) applyToObject(logoObject);
+        });
     });
 
     window.PompuiLogo = {

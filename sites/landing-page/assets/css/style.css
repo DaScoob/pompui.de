@@ -270,16 +270,13 @@ svg {
     border: 0;
     background: transparent;
     color-scheme: light;
-    opacity: 0;
+    opacity: 1;
     pointer-events: none;
-    visibility: hidden;
-    transition: opacity 420ms var(--ease-out), visibility 420ms;
+    transition: opacity 420ms var(--ease-out);
 }
 
-:root[data-color-mode="dark"] .logo-variant[data-logo-mode="dark"],
-:root[data-color-mode="light"] .logo-variant[data-logo-mode="light"] {
-    opacity: 1;
-    visibility: visible;
+.logo-variant.is-loading {
+    opacity: 0;
 }
 
 .topbar__actions,
