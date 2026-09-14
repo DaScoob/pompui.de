@@ -14,12 +14,18 @@ __pycache__/
 *.egg-info/
 .ipynb_checkpoints
 
-# App repos in repos/ are independent clones — the clone itself is ignored,
-# but hosting additions for vtracer (Dockerfile, nginx.conf, 404 page) are
-# tracked via exception rules below.
+# App repos in repos/ are independent clones — the clone itself is ignored.
+# Exception: vtracer is built from the clone (repos/README.md), so only its
+# hosting files (Dockerfile, nginx.conf, 404 page) are tracked — the upstream
+# clone sources stay ignored.
 repos/*/
 !repos/vtracer/
-!repos/vtracer/*
+repos/vtracer/*
+!repos/vtracer/Dockerfile
+!repos/vtracer/nginx.conf
+!repos/vtracer/html/
+repos/vtracer/html/*
+!repos/vtracer/html/404.html
 repos/vtracer/webapp/target/
 repos/vtracer/webapp/app/pkg/
 repos/vtracer/webapp/app/node_modules/

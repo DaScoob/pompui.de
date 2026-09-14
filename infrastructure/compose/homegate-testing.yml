@@ -13,6 +13,8 @@
 #                               12+ GB AGPL image and runs embedded
 #                               PostgreSQL+Redis — takes a while to become
 #                               healthy; needs secrets/snapotter-password)
+#   vtracer.pompui.de        -> 6015 (this repo; heavy one-time build:
+#                               Rust→wasm + webpack, ~10 min cold build)
 #
 # The external `web-network` (created by the daniel-hettich.de project) is not
 # needed in this workflow; joining it would fail when that stack is not up.
@@ -42,5 +44,11 @@ services:
   pompui-snapotter:
     ports: !override
       - "6014:1349"
+    networks: !override
+      - pompui-network
+
+  pompui-vtracer:
+    ports: !override
+      - "6015:8080"
     networks: !override
       - pompui-network
