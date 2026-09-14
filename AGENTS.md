@@ -2,10 +2,9 @@
 
 ## Development status — activity subscription wheel
 
-> [!WARNING]
-> The activity subscription wheel implementation on this feature branch is **not production-ready** and must not be merged into or deployed from `main` yet.
+The activity subscription wheel incorporates the Sites version 19 geometry and visibility fixes. The active tile has a hard visibility guarantee, edge fading is position-based, the wheel radius grows from a minimum mathematical tile distance, and the visual wheel depth remains constant while the tilt adapts to the radius.
 
-Blocking known issue: the tile of the currently active activity can disappear while the wheel is being rendered or moved. The implementation may only be treated as production-ready after this defect has been fixed and the active tile has been verified as continuously visible on desktop and mobile.
+The previous blocking issue in which the active tile could disappear is resolved in this implementation. Desktop and mobile behavior still need to pass the normal repository review and CI checks before deployment.
 
 ## Environment
 - **Project Root**: `/var/www/pompui.de`
