@@ -1,11 +1,6 @@
 (function () {
     "use strict";
 
-    const wheelStylesheet = document.createElement("link");
-    wheelStylesheet.rel = "stylesheet";
-    wheelStylesheet.href = "/assets/css/activity-wheel-v19.css";
-    document.head.append(wheelStylesheet);
-
     const isProduction = /(^|\.)pompui\.de$/.test(window.location.hostname);
     const port = (value) => (isProduction ? "" : ":" + value);
     const appUrl = {
@@ -165,6 +160,7 @@
     const root = document.documentElement;
     const page = document.body;
     const carousel = document.querySelector("[data-carousel]");
+    const carouselStage = document.querySelector(".carousel-stage");
     const details = document.querySelector("[data-activity-details]");
     const count = document.querySelector("[data-activity-count]");
     const status = document.querySelector("[data-activity-status]");
@@ -191,6 +187,7 @@
     let targetPosition = 0;
     let animationFrame = 0;
     let lastAnimationTime = 0;
+    let focusOnAnimationEnd = false;
     let changeToken = 0;
     let pointerStart = null;
     let suppressClickUntil = 0;
@@ -249,21 +246,19 @@
         return total ? ((index % total) + total) % total : 0;
     }
 
-    function createTile(activity, index) {
+    function createTile() {
         const tile = createElement("button", "activity-tile");
         tile.type = "button";
-        tile.dataset.activityId = activity.id;
-        tile.dataset.index = String(index);
         tile.setAttribute("aria-current", "false");
-        if (activity.system) tile.classList.add("activity-tile--system");
 
         const surface = createElement("span", "activity-tile__surface");
-        surface.append(createElement("span", "activity-tile__shine"), createActivityIcon(activity, "activity-tile__icon"));
-        tile.append(surface, createElement("span", "activity-tile__label", activity.title));
+        surface.append(createElement("span", "activity-tile__shine"));
+        tile.append(surface);
         tile.addEventListener("click", () => {
             if (Date.now() < suppressClickUntil) return;
-            const currentIndex = visibleActivities.findIndex((item) => item.id === activity.id);
-            if (currentIndex < 0) return;
+            const currentIndex = Number(tile.dataset.index);
+            const activity = visibleActivities[currentIndex];
+            if (!activity || !Number.isInteger(currentIndex)) return;
             if (currentIndex === activeIndex) {
                 if (activity.system) {
                     openSubscriptionDialog();
@@ -275,6 +270,37 @@
             goToIndex(currentIndex, true);
         });
         return tile;
+    }
+
+    function bindTile(tile, activity, index) {
+        if (tile.dataset.activityId !== activity.id) {
+            tile.dataset.activityId = activity.id;
+            tile.dataset.index = String(index);
+            tile.style.setProperty("--tile-accent", activity.system ? "var(--subscription-gray)" : activity.accent);
+            tile.classList.toggle("activity-tile--system", Boolean(activity.system));
+            const surface = tile.querySelector(".activity-tile__surface");
+            surface.querySelector(".activity-icon")?.remove();
+            surface.append(createActivityIcon(activity, "activity-tile__icon"));
+        } else if (tile.dataset.index !== String(index)) {
+            tile.dataset.index = String(index);
+        }
+    }
+
+    function activeTile() {
+        return tiles.find((tile) => tile.getAttribute("aria-hidden") !== "true" && Number(tile.dataset.index) === activeIndex);
+    }
+
+    function updateTileSelection() {
+        tiles.forEach((tile) => {
+            const tileIndex = Number(tile.dataset.index);
+            const activity = visibleActivities[tileIndex];
+            const isRendered = tile.getAttribute("aria-hidden") !== "true";
+            const isActive = isRendered && tileIndex === activeIndex;
+            tile.classList.toggle("is-active", isActive);
+            tile.setAttribute("aria-current", String(isActive));
+            if (activity) tile.setAttribute("aria-label", activity.title + (isActive ? " — erneut aktivieren" : " auswählen"));
+            tile.tabIndex = isActive && isRendered ? 0 : -1;
+        });
     }
 
     function renderAction(activity) {
@@ -347,7 +373,7 @@
         const normalized = normalizedIndex(index);
         const hasChanged = normalized !== activeIndex;
         if (!hasChanged && !forceUpdate) {
-            if (shouldFocus) tiles[activeIndex]?.focus({ preventScroll: true });
+            if (shouldFocus) activeTile()?.focus({ preventScroll: true });
             return;
         }
         activeIndex = normalized;
@@ -357,115 +383,76 @@
         updateLogoAccent(activity.accent);
         page.dataset.theme = activity.id;
         try { localStorage.setItem(lastActivityKey, activity.id); } catch { /* storage blocked */ }
-        tiles.forEach((tile, tileIndex) => {
-            const isActive = tileIndex === activeIndex;
-            tile.classList.toggle("is-active", isActive);
-            tile.setAttribute("aria-current", String(isActive));
-            tile.setAttribute("aria-label", visibleActivities[tileIndex].title + (isActive ? " — erneut aktivieren" : " auswählen"));
-            tile.tabIndex = isActive ? 0 : -1;
-        });
+        updateTileSelection();
         updateDetails(activity);
         if (hasChanged) pulseScene();
-        if (shouldFocus) tiles[activeIndex]?.focus({ preventScroll: true });
+        if (shouldFocus) activeTile()?.focus({ preventScroll: true });
     }
 
-    function updateSelectedFromTarget(shouldFocus) {
-        selectIndex(Math.round(targetPosition), shouldFocus);
-    }
-
-    function renderWheelPositions() {
+    function renderWheelPositions(shouldFocus, forceSelection) {
         const total = visibleActivities.length;
         if (!total) return;
-
         const compact = window.innerWidth <= 768;
         const width = carousel.clientWidth;
+        const height = carousel.clientHeight;
         const tileWidth = tiles[0]?.offsetWidth || (compact ? 86 : 152);
-        const baseGap = compact ? 20 : 35;
+        const geometry = window.PompuiWheelGeometry.createWheelLayout({
+            total,
+            position: currentPosition,
+            width,
+            height,
+            compact,
+            tileWidth
+        });
+        const radiusLift = `${geometry.verticalCompensation.toFixed(2)}px`;
+        if (carouselStage.style.getPropertyValue("--wheel-radius-lift") !== radiusLift) {
+            carouselStage.style.setProperty("--wheel-radius-lift", radiusLift);
+        }
+        const visualIndex = geometry.activeIndex;
+        selectIndex(visualIndex, false, Boolean(forceSelection));
 
-        // Sites v19: the v18 mathematical centre distance was doubled and
-        // then reduced by 25 %, resulting in 150 % of the v17 base distance.
-        const minimumCentreDistance = (tileWidth + baseGap) * 1.5;
-        const angleStep = (2 * Math.PI) / total;
-        const minimumRadius = total > 1
-            ? minimumCentreDistance / (2 * Math.sin(Math.PI / total))
-            : 0;
-        const radius = Math.max(width * 0.4, minimumRadius);
+        while (tiles.length < geometry.items.length) {
+            const tile = createTile();
+            tiles.push(tile);
+            carousel.append(tile);
+        }
 
-        // Keep the radial screen depth fixed. The physical tilt therefore
-        // becomes flatter automatically as the wheel radius grows.
-        const radialDepth = compact ? 42 : 52;
-        const tilt = Math.asin(Math.min(0.98, radialDepth / Math.max(radius, 1)));
-        const sinTilt = Math.sin(tilt);
-        const cosTilt = Math.cos(tilt);
-        const cameraDistance = Math.max(radius * 4, 1);
-        const frontPerspective = cameraDistance / (cameraDistance - radius * cosTilt);
-        const verticalOffset = compact ? -8 : -12;
-        const halfViewport = window.innerWidth / 2;
-        const fadeWidth = Math.min(window.innerWidth * 0.1, compact ? 56 : 96);
-        const fadeEnd = halfViewport;
-        const fadeStart = Math.max(0, fadeEnd - fadeWidth);
+        function writeStyle(tile, property, value) {
+            if (tile.style[property] !== value) tile.style[property] = value;
+        }
 
-        const project = (angle) => {
-            const sinAngle = Math.sin(angle);
-            const cosAngle = Math.cos(angle);
-            const z = cosAngle * radius * cosTilt;
-            const perspective = (cameraDistance / (cameraDistance - z)) / frontPerspective;
-            const depth = (cosAngle + 1) / 2;
-            return {
-                x: sinAngle * radius * perspective,
-                y: cosAngle * radius * sinTilt * perspective + verticalOffset,
-                scale: perspective,
-                depth
-            };
-        };
-
-        carousel.style.setProperty("--ring-width", `${(radius * 2).toFixed(2)}px`);
-        carousel.style.setProperty("--ring-height", `${(radialDepth * 2).toFixed(2)}px`);
-
-        tiles.forEach((tile, index) => {
-            const rawOffset = index - currentPosition;
-            const wrappedOffset = ((rawOffset + total / 2) % total + total) % total - total / 2;
-            const angle = wrappedOffset * angleStep;
-            const projected = project(angle);
-            const scaledHalfTile = tileWidth * projected.scale / 2;
-            const outerEdge = Math.abs(projected.x) + scaledHalfTile;
-
-            let edgeOpacity = 1;
-            if (outerEdge >= fadeEnd) {
-                edgeOpacity = 0;
-            } else if (outerEdge > fadeStart) {
-                const t = (fadeEnd - outerEdge) / Math.max(fadeEnd - fadeStart, 1);
-                edgeOpacity = t * t * (3 - 2 * t);
+        tiles.forEach((tile, poolIndex) => {
+            const item = geometry.items[poolIndex];
+            if (!item) {
+                writeStyle(tile, "visibility", "hidden");
+                writeStyle(tile, "pointerEvents", "none");
+                tile.setAttribute("aria-hidden", "true");
+                tile.tabIndex = -1;
+                return;
             }
 
-            const depthOpacity = 0.28 + projected.depth * 0.72;
-            let opacity = edgeOpacity * depthOpacity;
-            const isActive = index === activeIndex;
-
-            // The active tile is a hard invariant: it can never be hidden by
-            // edge virtualisation or fade calculations.
-            if (isActive) opacity = 1;
-
-            const hidden = opacity <= 0.001 && !isActive;
-            tile.style.setProperty("--ring-x", `${projected.x.toFixed(2)}px`);
-            tile.style.setProperty("--ring-y", `${projected.y.toFixed(2)}px`);
-            tile.style.setProperty("--ring-scale", projected.scale.toFixed(3));
-            tile.style.setProperty("--ring-opacity", opacity.toFixed(3));
-            tile.style.setProperty("--tile-accent", visibleActivities[index].system ? "var(--subscription-gray)" : visibleActivities[index].accent);
-            tile.style.zIndex = String(isActive ? 125 : 20 + Math.round(projected.depth * 80));
-            if (hidden) tile.setAttribute("aria-hidden", "true");
-            else tile.removeAttribute("aria-hidden");
+            const activity = visibleActivities[item.logicalIndex];
+            bindTile(tile, activity, item.logicalIndex);
+            tile.dataset.wheelState = item.state;
+            const transform = `translate3d(calc(-50% + ${item.x.toFixed(2)}px), calc(-50% + ${item.y.toFixed(2)}px), 0) scale(${item.scale.toFixed(3)})`;
+            writeStyle(tile, "transform", transform);
+            writeStyle(tile, "opacity", item.state === "hidden" ? "0" : item.opacity.toFixed(3));
+            writeStyle(tile, "zIndex", String(item.zIndex));
+            writeStyle(tile, "visibility", item.state === "hidden" ? "hidden" : "visible");
+            writeStyle(tile, "pointerEvents", item.state === "hidden" ? "none" : "auto");
+            tile.setAttribute("aria-hidden", String(item.state === "hidden"));
         });
 
-        const zeroOffset = ((-currentPosition + total / 2) % total + total) % total - total / 2;
-        const zeroAngle = zeroOffset * angleStep;
-        const zeroProjected = project(zeroAngle);
-        const compassAngle = Math.atan2(zeroProjected.y - verticalOffset, zeroProjected.x) * 180 / Math.PI + 90;
-        compass.style.setProperty("--compass-angle", `${compassAngle.toFixed(2)}deg`);
+        updateTileSelection();
+        if (shouldFocus) activeTile()?.focus({ preventScroll: true });
 
-        const projectedWheelExtent = radius + tileWidth / 2;
-        const needsCompass = total > 1 && projectedWheelExtent > fadeStart;
-        compass.hidden = !needsCompass;
+        const compassAngle = window.PompuiWheelGeometry.compassAngle(currentPosition, total);
+        const showCompass = geometry.requiresCompass;
+        compass.style.setProperty("--compass-angle", `${compassAngle.toFixed(3)}deg`);
+        compass.classList.toggle("is-visible", showCompass);
+        compass.disabled = !showCompass;
+        compass.tabIndex = showCompass ? 0 : -1;
+        compass.setAttribute("aria-hidden", String(!showCompass));
     }
 
     function animateWheel(time) {
@@ -474,25 +461,28 @@
         const difference = targetPosition - currentPosition;
         const blend = 1 - Math.exp(-elapsed / 72);
         currentPosition += difference * blend;
-        if (Math.abs(difference) < 0.001) {
+        if (Math.abs(targetPosition - currentPosition) < 0.001) {
             currentPosition = targetPosition;
             animationFrame = 0;
             lastAnimationTime = 0;
-            renderWheelPositions();
+            const shouldFocus = focusOnAnimationEnd;
+            focusOnAnimationEnd = false;
+            renderWheelPositions(shouldFocus);
             return;
         }
         renderWheelPositions();
         animationFrame = window.requestAnimationFrame(animateWheel);
     }
 
-    function startWheelAnimation() {
+    function startWheelAnimation(shouldFocus) {
+        focusOnAnimationEnd ||= Boolean(shouldFocus);
         if (!animationFrame) animationFrame = window.requestAnimationFrame(animateWheel);
     }
 
     function move(direction, shouldFocus) {
+        if (visibleActivities.length <= 1) return;
         targetPosition += direction;
-        updateSelectedFromTarget(Boolean(shouldFocus));
-        startWheelAnimation();
+        startWheelAnimation(shouldFocus);
     }
 
     function goToIndex(index, shouldFocus) {
@@ -503,18 +493,17 @@
         if (delta > total / 2) delta -= total;
         if (delta < -total / 2) delta += total;
         targetPosition += delta;
-        updateSelectedFromTarget(Boolean(shouldFocus));
-        startWheelAnimation();
+        startWheelAnimation(shouldFocus);
     }
 
     function renderCarousel(preferredId) {
+        if (animationFrame) window.cancelAnimationFrame(animationFrame);
+        animationFrame = 0;
+        lastAnimationTime = 0;
+        focusOnAnimationEnd = false;
         visibleActivities = [subscriptionActivity, ...activities.filter((activity) => subscriptions.has(activity.id))];
         carousel.replaceChildren();
-        tiles = visibleActivities.map((activity, index) => {
-            const tile = createTile(activity, index);
-            carousel.append(tile);
-            return tile;
-        });
+        tiles = [];
         controls.forEach((control) => {
             control.disabled = visibleActivities.length <= 1;
         });
@@ -526,8 +515,7 @@
         activeIndex = restoredIndex >= 0 ? restoredIndex : 0;
         currentPosition = activeIndex;
         targetPosition = activeIndex;
-        selectIndex(activeIndex, false, true);
-        renderWheelPositions();
+        renderWheelPositions(false, true);
     }
 
     function updateDialogState() {
@@ -613,7 +601,7 @@
     });
     dialog.addEventListener("close", () => {
         page.classList.remove("has-open-dialog");
-        tiles[0]?.focus({ preventScroll: true });
+        activeTile()?.focus({ preventScroll: true });
     });
 
     compass.addEventListener("click", () => {
@@ -649,11 +637,11 @@
     });
 
     window.addEventListener("wheel", (event) => {
-        if (dialog.open) return;
+        if (dialog.open || event.ctrlKey) return;
         event.preventDefault();
         const rawDelta = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
-        if (rawDelta === 0) return;
-        move(rawDelta > 0 ? 1 : -1, false);
+        // One browser wheel impulse advances one item, regardless of line/page settings.
+        if (rawDelta !== 0) move(Math.sign(rawDelta), false);
     }, { passive: false });
 
     carousel.addEventListener("pointerdown", (event) => {
@@ -663,6 +651,7 @@
             animationFrame = 0;
             lastAnimationTime = 0;
         }
+        focusOnAnimationEnd = false;
         targetPosition = currentPosition;
         pointerStart = {
             id: event.pointerId,
@@ -693,7 +682,6 @@
         const pixelsPerStep = window.innerWidth <= 768 ? 82 : 112;
         targetPosition = pointerStart.startTarget - deltaX / pixelsPerStep;
         currentPosition = targetPosition;
-        updateSelectedFromTarget(false);
         renderWheelPositions();
     });
 
@@ -707,16 +695,14 @@
         const pixelsPerStep = window.innerWidth <= 768 ? 82 : 112;
         const momentumSteps = Math.max(-8, Math.min(8, -velocity * 260 / pixelsPerStep));
         targetPosition = Math.round(targetPosition + momentumSteps);
-        updateSelectedFromTarget(false);
-        startWheelAnimation();
+        startWheelAnimation(false);
     });
 
     carousel.addEventListener("pointercancel", () => {
         if (!pointerStart) return;
         pointerStart = null;
         targetPosition = Math.round(targetPosition);
-        updateSelectedFromTarget(false);
-        startWheelAnimation();
+        startWheelAnimation(false);
     });
 
     let resizeTimer;
