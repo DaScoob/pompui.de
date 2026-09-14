@@ -17,6 +17,7 @@ repos/
   punctum/        # github.com/GitMinIT/Punctum (timer/stopwatch/alarm/pomodoro, MIT)
   garden-journal/ # github.com/DaScoob/Garden-Journal (Mein Gemüsegarten, Next.js/vinext, port 3000)
   snapotter/      # github.com/snapotter-hq/SnapOtter @v2.2.0 (file processing, AGPL-3.0, port 1349)
+  vtracer/        # github.com/visioncortex/vtracer (raster→vector, MIT/Apache-2.0, built from source, port 8080)
 ```
 
 **Special case — snapotter (AGPL-3.0):** the compose service does **not**
@@ -33,6 +34,13 @@ git clone --branch v2.2.0 https://github.com/snapotter-hq/SnapOtter.git snapotte
 
 Do not modify anything inside the clone (unmodified-run guarantee), and keep
 it in sync with the digest in `docker-compose.yml` on every update.
+
+**Built-from-source case — vtracer (MIT/Apache-2.0):** unlike snapotter,
+vtracer is built from the clone via its own multi-stage `Dockerfile`
+(Rust→wasm via `wasm-pack`, then webpack, then static nginx). MIT/Apache
+permits this; note the own-build fact in the impressum. The clone carries a
+`dist/`, `pkg/` and Rust `target/` after builds — all git-ignored from the
+pompui.de side; a cold build takes ~10 minutes.
 
 ## Adding a new app — step by step
 
