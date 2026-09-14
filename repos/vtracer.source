@@ -1,0 +1,7 @@
+# Canonical VTracer source for POMPUI deployment.
+REPOSITORY=https://github.com/DaScoob/vtracer.git
+BRANCH=pompui
+
+# Upstream reference. Do not deploy this branch directly.
+UPSTREAM_REPOSITORY=https://github.com/visioncortex/vtracer.git
+UPSTREAM_BRANCH=master
