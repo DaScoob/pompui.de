@@ -35,6 +35,7 @@ The previous blocking issue in which the active tile could disappear is resolved
 - `sites/landing-page/html/sites/snapotter/` — served AGPL licence-compliance docs for SnapOtter (image lives upstream).
 - `repos/` — **hosted apps as separate git repositories**, cloned into this tree; each is built and routed like any other container. See `repos/README.md` for the full how-to (add an app: clone repo, compose service, carousel entry, subdomain, proxy conf).
 - Garden Journal lives in its own repo (`https://github.com/DaScoob/Garden-Journal.git`); Punctum in `https://github.com/GitMinIT/Punctum`; SnapOtter upstream is `https://github.com/snapotter-hq/SnapOtter` (AGPL — clone pinned at the running tag into `repos/snapotter`, image digest-pinned in compose).
+- VTracer for POMPUI is sourced from `https://github.com/DaScoob/vtracer.git`, stable branch **`pompui`**. Do not deploy `visioncortex/vtracer:master` directly. Run `./repos/sync-vtracer.sh` before rebuilding VTracer.
 
 ## Infrastructure Map
 - **global-proxy** (external, from the daniel-hettich.de compose): nginx:alpine, SSL termination, routes:
@@ -45,9 +46,12 @@ The previous blocking issue in which the active tile could disappear is resolved
 - **pompui-landing**: static landing page (nginx-unprivileged:alpine, non-root, port 8080).
 - **pompui-punctum**: Punctum app (separate repo in `repos/punctum`, static nginx, port 8080).
 - **pompui-snapotter**: SnapOtter 2.2.0 file-processing suite (AGPL-3.0, embedded PostgreSQL/Redis, port 1349). **Licence compliance is mandatory** — see `sites/landing-page/html/sites/snapotter/COMPLIANCE.md` before updating it: pin image digest, update source offer, keep `repos/snapotter` checkout at the running tag. Auth enabled, telemetry off, password in `secrets/snapotter-password`.
-- **pompui-vtracer**: VTracer webapp (raster→vector, MIT/Apache-2.0, built from source via wasm-pack+webpack, port 8080). Client-side processing only (wasm in browser).
+- **pompui-vtracer**: VTracer webapp from `DaScoob/vtracer:pompui` (raster→vector, MIT/Apache-2.0, built from source via wasm-pack+webpack, port 8080). Client-side processing only (wasm in browser).
 
 ## Deployment
+0. Before a VTracer build/deploy, run `./repos/sync-vtracer.sh`. It synchronizes
+   `repos/vtracer` with the stable `DaScoob/vtracer:pompui` branch and refuses
+   to overwrite a diverged local checkout.
 1. `docker compose up -d --build` in this directory (builds `pompui-landing`, joins external `web-network`).
 2. Copy `infrastructure/nginx/conf.d/pompui-landing.conf` into `/var/www/daniel-hettich.de/infrastructure/nginx/conf.d/` (this is the directory volume-mounted into `global-proxy`).
 3. **Restart** the proxy whenever containers were **recreated** (new IPs): `docker restart global-proxy`.
