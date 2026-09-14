@@ -42,9 +42,9 @@ services:
     restart: always
 
   pompui-vtracer:
-    # VTracer (raster->vector) lives upstream (visioncortex/vtracer), cloned
-    # into repos/vtracer; hosting files (Dockerfile, nginx.conf, 404 page)
-    # are tracked in this repo (see repos/README.md).
+    # Stable POMPUI VTracer source: DaScoob/vtracer branch `pompui`.
+    # Synchronize the independent checkout in repos/vtracer with
+    # ./repos/sync-vtracer.sh before rebuilding (see repos/README.md).
     build: ./repos/vtracer
     container_name: pompui-vtracer
     cap_drop:
