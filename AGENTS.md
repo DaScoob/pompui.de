@@ -20,6 +20,7 @@ The previous blocking issue in which the active tile could disappear is resolved
   - `punctum.pompui.de` → **6012** (6011 is taken by open-webui on this host)
   - `gj.pompui.de` → **6013**
   - `snapotter.pompui.de` → **6014** (embedded PostgreSQL/Redis; first boot takes a while; needs `secrets/snapotter-password`)
+  - `vtracer.pompui.de` → **6015** (heavy one-time build: Rust→wasm + webpack)
 - The external `web-network` join is overridden away — the daniel-hettich.de stack does not need to be running for testing this repo.
 - daniel-hettich.de testing runs directly on **6009** from the daniel-hettich.de repo (see its AGENTS.md).
 - Verify: `curl http://192.168.178.60:6010/` (or `http://<LAN-IP>:<port>` from any device).
@@ -40,9 +41,11 @@ The previous blocking issue in which the active tile could disappear is resolved
   - `pompui.de` / `www.pompui.de` → `pompui-landing:8080`
   - `punctum.pompui.de` → `pompui-punctum:8080`
   - `snapotter.pompui.de` → `pompui-snapotter:1349`
+  - `vtracer.pompui.de` → `pompui-vtracer:8080`
 - **pompui-landing**: static landing page (nginx-unprivileged:alpine, non-root, port 8080).
 - **pompui-punctum**: Punctum app (separate repo in `repos/punctum`, static nginx, port 8080).
 - **pompui-snapotter**: SnapOtter 2.2.0 file-processing suite (AGPL-3.0, embedded PostgreSQL/Redis, port 1349). **Licence compliance is mandatory** — see `sites/landing-page/html/sites/snapotter/COMPLIANCE.md` before updating it: pin image digest, update source offer, keep `repos/snapotter` checkout at the running tag. Auth enabled, telemetry off, password in `secrets/snapotter-password`.
+- **pompui-vtracer**: VTracer webapp (raster→vector, MIT/Apache-2.0, built from source via wasm-pack+webpack, port 8080). Client-side processing only (wasm in browser).
 
 ## Deployment
 1. `docker compose up -d --build` in this directory (builds `pompui-landing`, joins external `web-network`).
