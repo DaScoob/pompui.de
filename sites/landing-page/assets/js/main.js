@@ -1,6 +1,11 @@
 (function () {
     "use strict";
 
+    const wheelStylesheet = document.createElement("link");
+    wheelStylesheet.rel = "stylesheet";
+    wheelStylesheet.href = "/assets/css/activity-wheel-v19.css";
+    document.head.append(wheelStylesheet);
+
     const isProduction = /(^|\.)pompui\.de$/.test(window.location.hostname);
     const port = (value) => (isProduction ? "" : ":" + value);
     const appUrl = {
@@ -187,8 +192,6 @@
     let animationFrame = 0;
     let lastAnimationTime = 0;
     let changeToken = 0;
-    let wheelTotal = 0;
-    let wheelResetTimer;
     let pointerStart = null;
     let suppressClickUntil = 0;
     let sceneFrame = 0;
@@ -371,46 +374,98 @@
     }
 
     function renderWheelPositions() {
-        // BLOCKING KNOWN ISSUE: the active activity tile can still disappear
-        // while the wheel is rendered or moved. This Sites-derived feature
-        // must not be treated as production-ready until the defect is fixed
-        // and verified on desktop and mobile. See AGENTS.md.
         const total = visibleActivities.length;
         if (!total) return;
+
         const compact = window.innerWidth <= 768;
         const width = carousel.clientWidth;
-        const height = carousel.clientHeight;
-        const spacing = compact ? 106 : 166;
+        const tileWidth = tiles[0]?.offsetWidth || (compact ? 86 : 152);
+        const baseGap = compact ? 20 : 35;
+
+        // Sites v19: the v18 mathematical centre distance was doubled and
+        // then reduced by 25 %, resulting in 150 % of the v17 base distance.
+        const minimumCentreDistance = (tileWidth + baseGap) * 1.5;
         const angleStep = (2 * Math.PI) / total;
-        const radiusX = Math.max(width * 0.4, total * spacing / (2 * Math.PI));
-        const radiusY = Math.max(34, Math.min(height * 0.25, compact ? 48 : 72));
-        carousel.style.setProperty("--ring-width", `${(radiusX * 2).toFixed(2)}px`);
-        carousel.style.setProperty("--ring-height", `${(radiusY * 2).toFixed(2)}px`);
+        const minimumRadius = total > 1
+            ? minimumCentreDistance / (2 * Math.sin(Math.PI / total))
+            : 0;
+        const radius = Math.max(width * 0.4, minimumRadius);
+
+        // Keep the radial screen depth fixed. The physical tilt therefore
+        // becomes flatter automatically as the wheel radius grows.
+        const radialDepth = compact ? 42 : 52;
+        const tilt = Math.asin(Math.min(0.98, radialDepth / Math.max(radius, 1)));
+        const sinTilt = Math.sin(tilt);
+        const cosTilt = Math.cos(tilt);
+        const cameraDistance = Math.max(radius * 4, 1);
+        const frontPerspective = cameraDistance / (cameraDistance - radius * cosTilt);
+        const verticalOffset = compact ? -8 : -12;
+        const halfViewport = window.innerWidth / 2;
+        const fadeWidth = Math.min(window.innerWidth * 0.1, compact ? 56 : 96);
+        const fadeEnd = halfViewport;
+        const fadeStart = Math.max(0, fadeEnd - fadeWidth);
+
+        const project = (angle) => {
+            const sinAngle = Math.sin(angle);
+            const cosAngle = Math.cos(angle);
+            const z = cosAngle * radius * cosTilt;
+            const perspective = (cameraDistance / (cameraDistance - z)) / frontPerspective;
+            const depth = (cosAngle + 1) / 2;
+            return {
+                x: sinAngle * radius * perspective,
+                y: cosAngle * radius * sinTilt * perspective + verticalOffset,
+                scale: perspective,
+                depth
+            };
+        };
+
+        carousel.style.setProperty("--ring-width", `${(radius * 2).toFixed(2)}px`);
+        carousel.style.setProperty("--ring-height", `${(radialDepth * 2).toFixed(2)}px`);
 
         tiles.forEach((tile, index) => {
             const rawOffset = index - currentPosition;
             const wrappedOffset = ((rawOffset + total / 2) % total + total) % total - total / 2;
             const angle = wrappedOffset * angleStep;
-            const x = Math.sin(angle) * radiusX;
-            const y = Math.cos(angle) * radiusY;
-            const depth = (Math.cos(angle) + 1) / 2;
-            const scale = 0.5 + depth * 0.5;
-            const opacity = 0.28 + depth * 0.72;
-            tile.style.setProperty("--ring-x", `${x.toFixed(2)}px`);
-            tile.style.setProperty("--ring-y", `${y.toFixed(2)}px`);
-            tile.style.setProperty("--ring-scale", scale.toFixed(3));
+            const projected = project(angle);
+            const scaledHalfTile = tileWidth * projected.scale / 2;
+            const outerEdge = Math.abs(projected.x) + scaledHalfTile;
+
+            let edgeOpacity = 1;
+            if (outerEdge >= fadeEnd) {
+                edgeOpacity = 0;
+            } else if (outerEdge > fadeStart) {
+                const t = (fadeEnd - outerEdge) / Math.max(fadeEnd - fadeStart, 1);
+                edgeOpacity = t * t * (3 - 2 * t);
+            }
+
+            const depthOpacity = 0.28 + projected.depth * 0.72;
+            let opacity = edgeOpacity * depthOpacity;
+            const isActive = index === activeIndex;
+
+            // The active tile is a hard invariant: it can never be hidden by
+            // edge virtualisation or fade calculations.
+            if (isActive) opacity = 1;
+
+            const hidden = opacity <= 0.001 && !isActive;
+            tile.style.setProperty("--ring-x", `${projected.x.toFixed(2)}px`);
+            tile.style.setProperty("--ring-y", `${projected.y.toFixed(2)}px`);
+            tile.style.setProperty("--ring-scale", projected.scale.toFixed(3));
             tile.style.setProperty("--ring-opacity", opacity.toFixed(3));
             tile.style.setProperty("--tile-accent", visibleActivities[index].system ? "var(--subscription-gray)" : visibleActivities[index].accent);
-            tile.style.zIndex = String(20 + Math.round(depth * 80));
-            tile.removeAttribute("aria-hidden");
+            tile.style.zIndex = String(isActive ? 125 : 20 + Math.round(projected.depth * 80));
+            if (hidden) tile.setAttribute("aria-hidden", "true");
+            else tile.removeAttribute("aria-hidden");
         });
 
         const zeroOffset = ((-currentPosition + total / 2) % total + total) % total - total / 2;
         const zeroAngle = zeroOffset * angleStep;
-        const compassX = Math.sin(zeroAngle) * radiusX;
-        const compassY = Math.cos(zeroAngle) * radiusY;
-        const compassAngle = Math.atan2(compassY, compassX) * 180 / Math.PI + 90;
+        const zeroProjected = project(zeroAngle);
+        const compassAngle = Math.atan2(zeroProjected.y - verticalOffset, zeroProjected.x) * 180 / Math.PI + 90;
         compass.style.setProperty("--compass-angle", `${compassAngle.toFixed(2)}deg`);
+
+        const projectedWheelExtent = radius + tileWidth / 2;
+        const needsCompass = total > 1 && projectedWheelExtent > fadeStart;
+        compass.hidden = !needsCompass;
     }
 
     function animateWheel(time) {
@@ -597,20 +652,8 @@
         if (dialog.open) return;
         event.preventDefault();
         const rawDelta = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
-        const unit = event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 18 : event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? window.innerWidth : 1;
-        wheelTotal += rawDelta * unit;
-        window.clearTimeout(wheelResetTimer);
-        wheelResetTimer = window.setTimeout(() => {
-            wheelTotal = 0;
-        }, 140);
-        const threshold = 40;
-        let processed = 0;
-        while (Math.abs(wheelTotal) >= threshold && processed < 12) {
-            const direction = wheelTotal > 0 ? 1 : -1;
-            move(direction, false);
-            wheelTotal -= direction * threshold;
-            processed += 1;
-        }
+        if (rawDelta === 0) return;
+        move(rawDelta > 0 ? 1 : -1, false);
     }, { passive: false });
 
     carousel.addEventListener("pointerdown", (event) => {
